@@ -3,604 +3,1085 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ForwardJuntos — Wireframe v2.2 · Flock</title>
+<title>De Kaart van Je Zenuwstelsel — ForwardJuntos V3</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --deep: #0a0f1a; --mid: #0f1e35; --teal: #1abfa0;
-    --teal2: #0d8c74; --blue: #2e7dd4; --text: #e8f0f8;
-    --muted: #6b8cae; --light: #d6e8f7; --gold: #f0a500;
-    --red: #ff6b6b; --r: 12px;
-  }
-  html { scroll-behavior: smooth; }
-  body {
-    background: var(--deep); color: var(--text);
-    font-family: 'Segoe UI', system-ui, sans-serif;
-    min-height: 100vh; overflow-x: hidden;
-  }
-  body::before {
-    content: ''; position: fixed; inset: 0;
-    background-image:
-      linear-gradient(rgba(26,191,160,.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(26,191,160,.04) 1px, transparent 1px);
-    background-size: 40px 40px; pointer-events: none; z-index: 0;
-  }
-  .wrap { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; padding: 0 20px 80px; }
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap');
 
-  /* ── HEADER ── */
-  header { text-align: center; padding: 40px 0 20px; border-bottom: 1px solid rgba(255,255,255,.06); }
-  .logo { font-size: 13px; font-weight: 700; color: var(--teal); letter-spacing: 1px; margin-bottom: 24px; }
-  h1 { font-size: clamp(26px, 5vw, 42px); font-weight: 800; line-height: 1.15; letter-spacing: -1px; margin-bottom: 10px; }
-  h1 em { color: var(--teal); font-style: normal; }
-  .tagline { font-size: 14px; color: var(--muted); margin-bottom: 20px; }
-  .principles { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; margin: 24px 0; }
-  .principle { text-align: center; flex: 1; min-width: 90px; max-width: 140px; }
-  .principle-num { width: 28px; height: 28px; border-radius: 50%; background: var(--teal); color: var(--deep); font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; }
-  .principle-name { font-size: 11px; font-weight: 700; color: var(--text); }
-  .principle-sub { font-size: 10px; color: var(--muted); }
+:root {
+  --deep:#0A1628; --mid:#112240; --panel:#162E4D;
+  --teal:#1ABFA0; --teal2:#0D8C74; --blue:#2E7DD4;
+  --gold:#F0A500; --red:#FF6B6B; --text:#E8F0F8;
+  --muted:#6B8CAE; --r:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--deep);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh;overflow-x:hidden;line-height:1.6;}
 
-  /* ── PRIVACY BADGE (upgrade 2) ── */
-  .privacy-bar {
-    display: flex; align-items: center; justify-content: center;
-    gap: 8px; flex-wrap: wrap;
-    background: rgba(26,191,160,.07);
-    border: 1px solid rgba(26,191,160,.2);
-    border-radius: 40px; padding: 8px 18px;
-    margin: 20px auto 0; max-width: 500px;
-    font-size: 12px; color: var(--muted);
-    transition: border-color .2s;
-  }
-  .privacy-bar:hover { border-color: rgba(26,191,160,.45); }
-  .privacy-badge {
-    display: flex; align-items: center; gap: 5px;
-    background: rgba(26,191,160,.12);
-    border: 1px solid rgba(26,191,160,.3);
-    border-radius: 20px; padding: 3px 10px;
-    font-size: 11px; font-weight: 700; color: var(--teal); white-space: nowrap;
-  }
-  .privacy-badge .dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--teal); animation: pulse-dot 2s ease-in-out infinite;
-  }
-  @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.7)} }
-  .privacy-items { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
-  .privacy-item { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted); }
-  .privacy-item::before { content: '✓'; color: var(--teal); font-size: 10px; }
+body::before{content:'';position:fixed;inset:0;
+  background-image:linear-gradient(rgba(30,100,160,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(30,100,160,.05) 1px,transparent 1px);
+  background-size:36px 36px;pointer-events:none;z-index:0;}
 
-  /* ── ZONES ── */
-  .zone { padding: 40px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
-  .zone-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; font-family: 'Courier New', monospace; }
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(10,22,40,.95);backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(26,191,160,.15);
+  padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:50px;}
+.nav-logo{font-size:14px;font-weight:800;color:var(--text);}
+.nav-logo span{color:var(--teal);}
+.nav-badge{font-family:'DM Mono',monospace;font-size:9px;color:var(--teal);
+  background:rgba(26,191,160,.1);border:1px solid rgba(26,191,160,.2);
+  padding:3px 9px;border-radius:20px;letter-spacing:1px;}
+.nav-disclaimer{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);}
 
-  /* ══════════════════════════════════════════════════════
-     UPGRADE 4 — NEURON ANIMATIE (Canvas)
-     Vervangt de drie statische dots volledig.
-  ══════════════════════════════════════════════════════ */
-  .neuron-anim-wrap {
-    margin: 8px 0 24px;
-    background: rgba(255,255,255,.02);
-    border: 1px solid rgba(255,255,255,.06);
-    border-radius: var(--r);
-    overflow: hidden; position: relative;
-  }
-  #neuronCanvas { display: block; width: 100%; height: 200px; cursor: pointer; }
+/* ── WRAP ── */
+.wrap{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:70px 20px 60px;}
 
-  .neuron-stage-label {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 10px 16px 12px;
-  }
-  .stage-info {
-    display: flex; align-items: center; gap: 8px;
-  }
-  .stage-dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    transition: background .4s;
-  }
-  .stage-name {
-    font-size: 11px; font-weight: 700;
-    font-family: 'Courier New', monospace;
-    letter-spacing: 1px; transition: color .4s;
-  }
-  .stage-desc {
-    font-size: 10px; color: var(--muted); text-align: right;
-  }
-  .anim-controls {
-    display: flex; justify-content: center; gap: 8px;
-    padding: 0 16px 14px;
-  }
-  .anim-btn {
-    font-size: 10px; font-weight: 700; letter-spacing: 1px;
-    padding: 5px 14px; border-radius: 20px; border: none;
-    cursor: pointer; transition: all .2s;
-    font-family: 'Courier New', monospace; text-transform: uppercase;
-  }
-  .anim-btn.gezond  { background: rgba(26,191,160,.15); color: var(--teal); border: 1px solid rgba(26,191,160,.3); }
-  .anim-btn.verstoord { background: rgba(255,107,107,.15); color: var(--red); border: 1px solid rgba(255,107,107,.3); }
-  .anim-btn.herstel { background: rgba(46,125,212,.15); color: var(--blue); border: 1px solid rgba(46,125,212,.3); }
-  .anim-btn:hover { transform: translateY(-2px); filter: brightness(1.2); }
-  .anim-btn.active { filter: brightness(1.4); box-shadow: 0 0 12px currentColor; }
-  /* ══════════════════════════════════════════════════════ */
+/* ── HERO ── */
+.hero{text-align:center;padding:48px 0 36px;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:40px;}
+.hero-eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;
+  color:var(--teal);text-transform:uppercase;margin-bottom:14px;}
+.hero-title{font-size:clamp(24px,5vw,42px);font-weight:800;line-height:1.15;
+  letter-spacing:-1px;margin-bottom:12px;}
+.hero-title em{color:var(--teal);font-style:normal;}
+.hero-sub{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);
+  max-width:520px;margin:0 auto 24px;line-height:1.75;}
 
-  /* ── KREITER LINK (upgrade 3) ── */
-  .science-anchor {
-    background: linear-gradient(135deg, rgba(26,191,160,.08), rgba(46,125,212,.06));
-    border: 1px solid rgba(26,191,160,.2);
-    border-radius: var(--r); padding: 16px 20px; margin: 24px 0;
-    display: flex; align-items: flex-start; gap: 14px;
-    text-decoration: none; transition: all .25s;
-    position: relative; overflow: hidden;
-  }
-  .science-anchor::before {
-    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-    width: 3px; background: linear-gradient(180deg, var(--teal), var(--blue));
-  }
-  .science-anchor:hover { border-color: rgba(26,191,160,.45); transform: translateX(4px); }
-  .science-icon { font-size: 28px; flex-shrink: 0; margin-top: 2px; }
-  .science-text { flex: 1; }
-  .science-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--teal); margin-bottom: 4px; font-family: 'Courier New', monospace; }
-  .science-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; line-height: 1.3; }
-  .science-sub { font-size: 11px; color: var(--muted); line-height: 1.5; }
-  .science-badge { font-size: 9px; font-weight: 700; letter-spacing: 1px; background: rgba(240,165,0,.15); color: var(--gold); border: 1px solid rgba(240,165,0,.3); padding: 2px 8px; border-radius: 20px; margin-top: 6px; display: inline-block; }
-  .science-anchor[data-active="false"] { opacity: 0; pointer-events: none; height: 0; padding: 0; margin: 0; border: none; }
-  .science-anchor[data-active="true"]  { opacity: 1; animation: fade-in .5s ease; }
-  @keyframes fade-in { from{opacity:0;transform:translateY(8px)} to{opacity:1} }
+/* Neuron animation */
+.neuron-strip{display:flex;align-items:center;justify-content:center;
+  gap:0;margin-bottom:28px;}
+.n-node{width:14px;height:14px;border-radius:50%;border:2px solid var(--teal);
+  background:transparent;position:relative;transition:all .4s;}
+.n-node.healthy{background:var(--teal);box-shadow:0 0 10px var(--teal);}
+.n-node.lesion{background:var(--red);border-color:var(--red);box-shadow:0 0 10px var(--red);}
+.n-node.repair{background:var(--gold);border-color:var(--gold);box-shadow:0 0 10px var(--gold);}
+.n-line{height:2px;width:32px;background:linear-gradient(90deg,var(--teal),rgba(26,191,160,.3));
+  transition:all .4s;}
+.n-line.disrupted{background:linear-gradient(90deg,rgba(255,107,107,.5),transparent);}
+.n-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);
+  text-align:center;margin-top:28px;letter-spacing:1px;display:flex;gap:24px;justify-content:center;}
+.n-label span::before{content:'· ';}
 
-  /* ── ROUTING ── */
-  h2 { font-size: clamp(20px,4vw,32px); font-weight: 800; line-height: 1.2; letter-spacing: -.5px; margin-bottom: 10px; }
-  h2 em { color: var(--teal); font-style: normal; }
-  .routing-options { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; }
-  .routing-option { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); border-radius: var(--r); padding: 14px 16px; cursor: pointer; transition: all .2s; text-decoration: none; color: var(--text); font-size: 14px; }
-  .routing-option:hover { border-color: rgba(26,191,160,.4); background: rgba(26,191,160,.06); transform: translateX(4px); }
-  .routing-num { width: 24px; height: 24px; border-radius: 50%; background: var(--teal); color: var(--deep); font-weight: 800; font-size: 11px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+/* ── STATS BAR ── */
+.stats-bar{display:flex;gap:10px;margin-bottom:32px;flex-wrap:wrap;}
+.stat{flex:1;min-width:120px;background:var(--mid);border:1px solid rgba(255,255,255,.06);
+  border-radius:var(--r);padding:12px 14px;text-align:center;}
+.stat-num{font-size:22px;font-weight:800;color:var(--teal);display:block;}
+.stat-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);
+  letter-spacing:1px;text-transform:uppercase;}
 
-  /* ── ZONE 3 ── */
-  .quote-block { background: rgba(255,255,255,.03); border-left: 3px solid var(--teal); border-radius: 0 var(--r) var(--r) 0; padding: 16px 20px; margin: 24px 0; font-size: 13px; color: var(--light); line-height: 1.7; font-style: italic; }
-  .features { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
-  .feature { display: flex; gap: 14px; align-items: flex-start; padding: 14px; background: rgba(255,255,255,.03); border-radius: var(--r); border: 1px solid rgba(255,255,255,.06); }
-  .feature-num { width: 28px; height: 28px; border-radius: 50%; background: rgba(26,191,160,.15); border: 1px solid rgba(26,191,160,.3); color: var(--teal); font-weight: 800; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
-  .feature-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
-  .feature-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
-  .cta-row { display: flex; flex-direction: column; align-items: center; gap: 8px; margin: 28px 0 8px; }
-  .cta-main { background: linear-gradient(135deg, var(--teal), var(--blue)); color: var(--deep); font-weight: 700; font-size: 14px; padding: 14px 28px; border-radius: 28px; text-decoration: none; transition: all .2s; box-shadow: 0 4px 20px rgba(26,191,160,.25); }
-  .cta-main:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(26,191,160,.4); }
-  .cta-sub { font-size: 11px; color: var(--muted); }
+/* ── TOGGLE BAR ── */
+.toggle-bar{display:flex;gap:6px;margin-bottom:24px;background:var(--mid);
+  border-radius:var(--r);padding:6px;border:1px solid rgba(255,255,255,.06);}
+.toggle-btn{flex:1;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;
+  padding:8px;border-radius:8px;border:none;background:transparent;
+  color:var(--muted);cursor:pointer;transition:all .2s;text-transform:uppercase;}
+.toggle-btn.active{background:var(--teal);color:var(--deep);font-weight:700;}
 
-  /* ── PRO CTA (upgrade 5) ── */
-  .pro-cta { margin: 40px 0 0; padding: 24px; background: var(--mid); border-radius: var(--r); border: 1px solid rgba(255,255,255,.06); position: relative; overflow: hidden; }
-  .pro-cta::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--teal), var(--blue)); }
-  .pro-cta-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; font-family: 'Courier New', monospace; }
-  .pro-cta-title { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 6px; line-height: 1.3; }
-  .pro-cta-sub { font-size: 12px; color: var(--muted); margin-bottom: 16px; line-height: 1.6; }
-  .pro-cta-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
-  .pro-btn { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 700; padding: 10px 18px; border-radius: 24px; text-decoration: none; transition: all .2s; white-space: nowrap; }
-  .pro-btn-primary { background: linear-gradient(135deg, var(--teal), var(--blue)); color: var(--deep); box-shadow: 0 4px 16px rgba(26,191,160,.25); }
-  .pro-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(26,191,160,.4); }
-  .pro-btn-secondary { background: transparent; color: var(--muted); border: 1px solid rgba(255,255,255,.1); }
-  .pro-btn-secondary:hover { border-color: rgba(26,191,160,.3); color: var(--teal); }
-  .pro-who { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
-  .pro-who-tag { font-size: 10px; color: var(--teal); background: rgba(26,191,160,.1); border: 1px solid rgba(26,191,160,.2); padding: 3px 9px; border-radius: 20px; }
+/* ── CATEGORY ── */
+.cat-header{display:flex;align-items:center;gap:10px;margin:28px 0 12px;}
+.cat-line{flex:1;height:1px;background:linear-gradient(90deg,rgba(26,191,160,.3),transparent);}
+.cat-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;
+  color:var(--teal);text-transform:uppercase;white-space:nowrap;}
 
-  footer { text-align: center; padding: 24px 0; border-top: 1px solid rgba(255,255,255,.06); margin-top: 40px; font-size: 11px; color: rgba(107,140,174,.5); }
+/* ── NERVE CARD ── */
+.nerve-card{background:var(--mid);border:1px solid rgba(255,255,255,.06);
+  border-radius:var(--r);margin-bottom:10px;overflow:hidden;
+  transition:border-color .25s,transform .2s;cursor:pointer;}
+.nerve-card:hover{border-color:rgba(26,191,160,.3);transform:translateX(3px);}
+.nerve-card.active{border-color:var(--teal);border-left:3px solid var(--teal);}
+.nerve-card.active .ripple-bar{display:block;}
+
+.nerve-head{display:flex;align-items:center;gap:12px;padding:14px 16px;}
+.nerve-icon{width:36px;height:36px;border-radius:50%;display:flex;
+  align-items:center;justify-content:center;font-size:16px;flex-shrink:0;
+  background:rgba(26,191,160,.1);border:1px solid rgba(26,191,160,.2);}
+.nerve-card.active .nerve-icon{background:rgba(26,191,160,.2);box-shadow:0 0 12px rgba(26,191,160,.3);}
+.nerve-info{flex:1;}
+.nerve-name{font-size:14px;font-weight:700;margin-bottom:2px;}
+.nerve-path{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);}
+.nerve-chevron{font-size:12px;color:var(--muted);transition:transform .3s;}
+.nerve-card.active .nerve-chevron{transform:rotate(90deg);color:var(--teal);}
+
+/* ── RIPPLE BAR (new) ── */
+.ripple-bar{display:none;padding:0 16px 4px;overflow:hidden;}
+.ripple-track{height:3px;background:rgba(255,255,255,.06);border-radius:20px;
+  overflow:hidden;position:relative;}
+.ripple-fill{height:100%;border-radius:20px;width:0;
+  background:linear-gradient(90deg,var(--teal),var(--blue));
+  animation:rippleFill 1.2s ease forwards;}
+@keyframes rippleFill{to{width:100%;}}
+.ripple-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--teal);
+  letter-spacing:1px;margin-bottom:4px;display:flex;justify-content:space-between;}
+
+/* ── NERVE BODY ── */
+.nerve-body{display:none;padding:0 16px 16px;}
+.nerve-card.active .nerve-body{display:block;}
+
+.nerve-text{font-size:13px;color:#C0D4E8;line-height:1.75;margin-bottom:12px;}
+
+/* View modes */
+.view-anatomy{display:block;}
+.view-mri{display:none;}
+.view-life{display:none;}
+.mode-anatomy .view-anatomy{display:block;}
+.mode-anatomy .view-mri,.mode-anatomy .view-life{display:none;}
+.mode-mri .view-mri{display:block;}
+.mode-mri .view-anatomy,.mode-mri .view-life{display:none;}
+.mode-life .view-life{display:block;}
+.mode-life .view-anatomy,.mode-life .view-mri{display:none;}
+
+.symptom-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.tag{font-family:'DM Mono',monospace;font-size:10px;
+  padding:3px 10px;border-radius:20px;
+  background:rgba(255,107,107,.1);color:#FF9A9A;
+  border:1px solid rgba(255,107,107,.2);}
+.tag.teal{background:rgba(26,191,160,.1);color:var(--teal);border-color:rgba(26,191,160,.2);}
+
+/* Kreiter badge */
+.kreiter-badge{font-family:'DM Mono',monospace;font-size:9px;
+  color:var(--gold);background:rgba(240,165,0,.1);
+  border:1px solid rgba(240,165,0,.2);
+  padding:3px 8px;border-radius:20px;display:inline-flex;
+  align-items:center;gap:4px;margin-top:8px;}
+
+/* ── RIPPLE MAP visual (new) ── */
+.ripple-map{background:rgba(26,191,160,.04);border:1px solid rgba(26,191,160,.15);
+  border-radius:8px;padding:12px 14px;margin-top:10px;}
+.ripple-map-title{font-family:'DM Mono',monospace;font-size:9px;
+  color:var(--teal);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+.ripple-chain{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.ripple-node{font-size:11px;padding:4px 10px;border-radius:20px;
+  background:var(--panel);border:1px solid rgba(255,255,255,.08);}
+.ripple-node.lesion-node{background:rgba(255,107,107,.12);
+  border-color:rgba(255,107,107,.3);color:#FF9A9A;}
+.ripple-node.effect-node{background:rgba(240,165,0,.1);
+  border-color:rgba(240,165,0,.25);color:var(--gold);}
+.ripple-node.functional-node{background:rgba(26,191,160,.08);
+  border-color:rgba(26,191,160,.2);color:var(--teal);}
+.ripple-arrow{color:var(--muted);font-size:12px;}
+
+/* ── CONSULT VIEW BUTTON ── */
+.consult-btn{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;
+  text-transform:uppercase;padding:8px 16px;border-radius:20px;
+  background:rgba(26,191,160,.1);color:var(--teal);
+  border:1px solid rgba(26,191,160,.25);cursor:pointer;
+  transition:all .2s;margin-top:12px;display:inline-block;}
+.consult-btn:hover{background:rgba(26,191,160,.2);}
+
+/* ── WILDISCO ── */
+.future-section{background:linear-gradient(135deg,rgba(17,34,64,.8),rgba(10,22,40,.9));
+  border:1px solid rgba(26,191,160,.2);border-radius:var(--r);
+  padding:28px;margin:40px 0;}
+.future-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;
+  color:var(--teal);text-transform:uppercase;margin-bottom:8px;}
+.future-title{font-size:20px;font-weight:800;margin-bottom:6px;}
+.future-title em{color:var(--teal);font-style:normal;}
+.future-sub{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);
+  margin-bottom:20px;}
+.future-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0;}
+@media(max-width:540px){.future-grid{grid-template-columns:1fr;}}
+.future-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+  border-radius:8px;padding:14px;}
+.future-card-icon{font-size:20px;margin-bottom:6px;}
+.future-card-title{font-size:12px;font-weight:700;color:var(--teal);margin-bottom:4px;}
+.future-card-text{font-size:11.5px;color:#A8C0D8;line-height:1.6;}
+
+.roadmap{display:flex;flex-direction:column;gap:8px;margin:16px 0;}
+.roadmap-item{display:flex;gap:12px;align-items:flex-start;}
+.roadmap-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.roadmap-dot.done{background:var(--teal);}
+.roadmap-dot.near{background:var(--gold);}
+.roadmap-dot.future{background:var(--muted);opacity:.5;}
+.roadmap-text{font-size:12px;color:#A8C0D8;line-height:1.5;}
+.roadmap-text strong{color:var(--text);}
+
+/* ── QUOTE ── */
+.quote-block{background:rgba(26,191,160,.06);border-left:3px solid var(--teal);
+  border-radius:0 var(--r) var(--r) 0;padding:18px 20px;margin:28px 0;
+  font-style:italic;font-size:13px;color:#D0E4F4;line-height:1.75;}
+.quote-author{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);
+  font-style:normal;margin-top:8px;}
+
+/* ── FOOTER ── */
+footer{border-top:1px solid rgba(255,255,255,.06);padding:24px 0 0;text-align:center;}
+.footer-disclaimer{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);
+  margin-bottom:8px;line-height:1.6;}
+.footer-tagline{font-style:italic;font-size:13px;color:var(--muted);}
+.footer-tagline span{color:var(--teal);}
+
+/* ── CANVAS NEURON ANIMATIE (Upgrade 4) ── */
+.neuron-anim-wrap{
+  margin:16px auto 8px;max-width:600px;
+  background:rgba(255,255,255,.02);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:var(--r);overflow:hidden;
+}
+#neuronCanvas{display:block;width:100%;height:180px;cursor:pointer;}
+.neuron-stage-label{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 14px 6px;gap:8px;
+}
+.stage-info{display:flex;align-items:center;gap:8px;}
+.anim-controls{
+  display:flex;justify-content:center;gap:8px;
+  padding:0 14px 12px;
+}
+.anim-btn-n{
+  font-family:'DM Mono',monospace;font-size:9px;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;
+  padding:5px 14px;border-radius:20px;border:1px solid;
+  cursor:pointer;transition:all .2s;background:transparent;
+}
+.gezond-btn{color:#1ABFA0;border-color:rgba(26,191,160,.3);background:rgba(26,191,160,.08);}
+.verstoord-btn{color:#FF6B6B;border-color:rgba(255,107,107,.3);background:rgba(255,107,107,.08);}
+.herstel-btn{color:#2E7DD4;border-color:rgba(46,125,212,.3);background:rgba(46,125,212,.08);}
+.active-btn{filter:brightness(1.4);box-shadow:0 0 10px currentColor;}
+.anim-btn-n:hover{transform:translateY(-2px);filter:brightness(1.2);}
+
+
+.stbtn{position:fixed;bottom:20px;right:20px;z-index:50;
+  width:34px;height:34px;border-radius:50%;
+  background:var(--teal);color:var(--deep);
+  border:none;cursor:pointer;font-size:14px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 14px rgba(26,191,160,.25);
+  transition:all .2s;opacity:0;}
+.stbtn.vis{opacity:1;}
+.stbtn:hover{transform:translateY(-2px);}
+
+@media(max-width:600px){
+  .stats-bar{flex-direction:column;}
+  .toggle-bar{flex-direction:column;}
+}
 </style>
 </head>
 <body>
+
+<nav>
+  <div class="nav-logo">Forward<span>Juntos</span></div>
+  <div class="nav-disclaimer">⚕ Geen medisch advies</div>
+  <div class="nav-badge">Zenuwkaart V3</div>
+</nav>
+
 <div class="wrap">
 
-  <!-- HEADER -->
-  <header>
-    <div class="logo">ForwardJuntos · Van laesie naar leven</div>
-    <div class="privacy-bar">
-      <div class="privacy-badge"><span class="dot"></span>GDPR-by-design</div>
-      <div class="privacy-items">
-        <span class="privacy-item">Geen tracking</span>
-        <span class="privacy-item">Local-first</span>
-        <span class="privacy-item">Jouw data blijft van jou</span>
-      </div>
-    </div>
-    <h1 style="margin-top:24px">Samen bewegen. <em>Begrijpen wat er gebeurt.</em></h1>
-    <p class="tagline">Drie principes uit de natuur. Eén platform voor mensen met MS.</p>
-    <div class="principles">
-      <div class="principle"><div class="principle-num">1</div><div class="principle-name">Ruimte</div><div class="principle-sub">respecteren</div></div>
-      <div class="principle"><div class="principle-num">2</div><div class="principle-name">Tempo</div><div class="principle-sub">afstemmen</div></div>
-      <div class="principle"><div class="principle-num">3</div><div class="principle-name">Samen</div><div class="principle-sub">centreren</div></div>
-    </div>
-    <p style="font-size:12px;color:var(--muted)">Ik ben hier aangekomen ↓</p>
-  </header>
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-eyebrow">De Kaart van Je Zenuwstelsel</div>
+    <h1 class="hero-title">Elk symptoom heeft een <em>adres</em><br>in je zenuwstelsel.</h1>
+    <p class="hero-sub">Klik op een zenuwbaan om te zien waar hij loopt, wat hij doet, en wat er kan veranderen bij een laesie. Jij bepaalt het tempo.</p>
 
-  <!-- ZONE 1: NEURON ANIMATIE -->
-  <div class="zone">
-    <div class="zone-label">Zone 1 — Neuron Visualisatie</div>
-
-    <!-- UPGRADE 4: Canvas animatie -->
+    <!-- Neuron animation — Upgrade 4: interactieve Canvas animatie -->
     <div class="neuron-anim-wrap">
       <canvas id="neuronCanvas"></canvas>
       <div class="neuron-stage-label">
         <div class="stage-info">
-          <div class="stage-dot" id="stageDot"></div>
-          <div class="stage-name" id="stageName">GEZOND SIGNAAL</div>
+          <div class="stage-dot" id="stageDot" style="width:8px;height:8px;border-radius:50%;background:#1ABFA0;box-shadow:0 0 8px #1ABFA0;transition:background .4s;flex-shrink:0;"></div>
+          <div class="stage-name" id="stageName" style="font-family:'DM Mono',monospace;font-size:10px;font-weight:700;letter-spacing:1px;color:#1ABFA0;transition:color .4s;">GEZOND SIGNAAL</div>
         </div>
-        <div class="stage-desc" id="stageDesc">Klik op de animatie of gebruik de knoppen</div>
+        <div class="stage-desc" id="stageDesc" style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);text-align:right;">Klik op de animatie of gebruik de knoppen</div>
       </div>
       <div class="anim-controls">
-        <button class="anim-btn gezond active" onclick="setStage('gezond')">Gezond</button>
-        <button class="anim-btn verstoord" onclick="setStage('verstoord')">Verstoord</button>
-        <button class="anim-btn herstel" onclick="setStage('herstel')">Herstel</button>
+        <button class="anim-btn-n gezond-btn active-btn" onclick="setStage('gezond')">Gezond</button>
+        <button class="anim-btn-n verstoord-btn" onclick="setStage('verstoord')">Verstoord</button>
+        <button class="anim-btn-n herstel-btn" onclick="setStage('herstel')">Herstel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat">
+      <span class="stat-num">36.000+</span>
+      <span class="stat-label">MS-patiënten NL</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">8</span>
+      <span class="stat-label">Zenuwbanen</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num" id="active-count">0</span>
+      <span class="stat-label">Actief geselecteerd</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num" id="view-label" style="font-size:13px;margin-top:2px;">Anatomie</span>
+      <span class="stat-label">Huidige weergave</span>
+    </div>
+  </div>
+
+  <!-- Toggle -->
+  <div class="toggle-bar" id="toggle-bar">
+    <button class="toggle-btn active" onclick="setMode('anatomy',this)">Anatomie</button>
+    <button class="toggle-btn" onclick="setMode('mri',this)">MRI-stijl</button>
+    <button class="toggle-btn" onclick="setMode('life',this)">Dagelijks leven</button>
+  </div>
+
+  <!-- Kaart content -->
+  <div id="kaart" class="mode-anatomy">
+
+    <!-- Beweging & Coördinatie -->
+    <div class="cat-header">
+      <div class="cat-label">Beweging & Coördinatie</div>
+      <div class="cat-line"></div>
+    </div>
+
+    <div class="nerve-card" data-id="cst" onclick="toggleCard(this)">
+      <div class="nerve-head">
+        <div class="nerve-icon">🧠</div>
+        <div class="nerve-info">
+          <div class="nerve-name">Corticospinaal tracé</div>
+          <div class="nerve-path">Hersenschors → ruggenmerg → spieren</div>
+        </div>
+        <div class="nerve-chevron">›</div>
+      </div>
+      <div class="ripple-bar">
+        <div class="ripple-label"><span>Laesie-impact verspreiding</span><span id="cst-pct">0%</span></div>
+        <div class="ripple-track"><div class="ripple-fill" id="cst-fill"></div></div>
+      </div>
+      <div class="nerve-body">
+        <div class="view-anatomy">
+          <p class="nerve-text">De motorsnelweg van je zenuwstelsel. Signalen reizen van de motorische cortex naar beneden om elke bewuste beweging aan te sturen. Een laesie hier verstoort die verbinding — van lichte zwakte tot volledige verlamming.</p>
+        </div>
+        <div class="view-mri">
+          <p class="nerve-text">Op MRI zijn corticospinale laesies zichtbaar als hyperintense vlekken op T2-gewogen beelden, vaak periventriculair. Dawson-vingers staan loodrecht op het corpus callosum — een van de karakteristiekste MS-patronen. Bij progressieve MS: geleidelijke axonale degeneratie zichtbaar als atrofie.</p>
+        </div>
+        <div class="view-life">
+          <p class="nerve-text">Je wil een glas pakken, maar je arm reageert langzamer dan je denkt. Traplopen kost meer concentratie. 's Avonds voelt je been zwaarder — niet moe, maar trager van signaal. Dit is geen verbeelding: het is een laesie op de verbinding.</p>
+        </div>
+        <div class="ripple-map">
+          <div class="ripple-map-title">▸ Ripple mapping — wat beïnvloedt wat</div>
+          <div class="ripple-chain">
+            <div class="ripple-node lesion-node">Laesie cervicaal</div>
+            <div class="ripple-arrow">→</div>
+            <div class="ripple-node effect-node">Signaal vertraagd</div>
+            <div class="ripple-arrow">→</div>
+            <div class="ripple-node functional-node">Loopproblemen</div>
+            <div class="ripple-arrow">→</div>
+            <div class="ripple-node functional-node">Spasticiteit</div>
+          </div>
+        </div>
+        <div class="symptom-tags">
+          <span class="tag">Spierkrachtverlies</span>
+          <span class="tag">Loopproblemen</span>
+          <span class="tag">Spasticiteit</span>
+          <span class="tag">Krampen</span>
+        </div>
+        <div class="kreiter-badge">🔬 Kreiter thesis — cervicale laesies · 15 juni 2026</div>
+        <div><button class="consult-btn" onclick="exportConsult('Corticospinaal tracé')">📋 Voeg toe aan Consult View</button></div>
       </div>
     </div>
 
-    <!-- UPGRADE 3: Kreiter link — activeer na 15/6 -->
-    <a class="science-anchor"
-       data-active="false"
-       href="https://cris.maastrichtuniversity.nl"
-       target="_blank" rel="noopener">
-      <div class="science-icon">🔬</div>
-      <div class="science-text">
-        <div class="science-label">Wetenschappelijke basis · Maastricht University</div>
-        <div class="science-title">Ruggenmerglaesies bij MS: beeldvorming en behandelmonitoring</div>
-        <div class="science-sub">Proefschrift Daniël Kreiter · Promotor: Prof. dr. R.M.M. Hupperts · Zuyderland MC &amp; UM<br>De visualisaties in ForwardJuntos zijn direct gebaseerd op dit onderzoek.</div>
-        <span class="science-badge">Verdedigd 15 juni 2026 · Universiteit Maastricht</span>
+    <div class="nerve-card" data-id="cer" onclick="toggleCard(this)">
+      <div class="nerve-head">
+        <div class="nerve-icon">⚖️</div>
+        <div class="nerve-info">
+          <div class="nerve-name">Cerebellaire banen</div>
+          <div class="nerve-path">Cerebellum ↔ hersenstam — balanscomputer</div>
+        </div>
+        <div class="nerve-chevron">›</div>
       </div>
-    </a>
+      <div class="ripple-bar">
+        <div class="ripple-label"><span>Laesie-impact verspreiding</span><span>—</span></div>
+        <div class="ripple-track"><div class="ripple-fill"></div></div>
+      </div>
+      <div class="nerve-body">
+        <div class="view-anatomy">
+          <p class="nerve-text">Het cerebellum verfijnt elke beweging en bewaakt balans. "Bewegen alsof je dronken bent, maar je bent het niet." MS-laesies hier zijn goed zichtbaar op MRI als witte vlekken in de kleinhersenen.</p>
+        </div>
+        <div class="view-mri">
+          <p class="nerve-text">Cerebellaire laesies verschijnen op T2-FLAIR als heldere vlekken in de kleinhersenen en hersenstam. Ze zijn minder frequent dan supratentoriële laesies maar klinisch sterk impactvol — zelfs kleine laesies geven disproportioneel veel symptomen.</p>
+        </div>
+        <div class="view-life">
+          <p class="nerve-text">Je koffiekopje mis je net. Je handschrift is onleesbaar geworden. Bij moeheid wordt het erger — niet door zwakte, maar doordat de fijnafstelling van elke beweging verstoord is. Het cerebellum is de dirigent die zijn partituur kwijt is.</p>
+        </div>
+        <div class="ripple-map">
+          <div class="ripple-map-title">▸ Ripple mapping</div>
+          <div class="ripple-chain">
+            <div class="ripple-node lesion-node">Laesie cerebellum</div>
+            <div class="ripple-arrow">→</div>
+            <div class="ripple-node effect-node">Fijnmotoriek verstoord</div>
+            <div class="ripple-arrow">→</div>
+            <div class="ripple-node functional-node">Wankelen</div>
+            <div class="ripple-arrow">→</div>
+            <div class="ripple-node functional-node">Tremor</div>
+          </div>
+        </div>
+        <div class="symptom-tags">
+          <span class="tag">Wankelen</span><span class="tag">Tremor</span>
+          <span class="tag">Dysartrie</span><span class="tag">Nystagmus</span>
+        </div>
+        <div><button class="consult-btn" onclick="exportConsult('Cerebellaire banen')">📋 Voeg toe aan Consult View</button></div>
+      </div>
+    </div>
+
+    <!-- Gevoel & Pijn -->
+    <div class="cat-header">
+      <div class="cat-label">Gevoel & Pijn</div>
+      <div class="cat-line"></div>
+    </div>
+
+    <div class="nerve-card" data-id="stt" onclick="toggleCard(this)">
+      <div class="nerve-head">
+        <div class="nerve-icon">⚡</div>
+        <div class="nerve-info">
+          <div class="nerve-name">Spinothalamisch tracé</div>
+          <div class="nerve-path">Pijn & temperatuur → thalamus → bewustzijn</div>
+        </div>
+        <div class="nerve-chevron">›</div>
+      </div>
+      <div class="ripple-bar">
+        <div class="ripple-label"><span>Laesie-impact verspreiding</span><span>—</span></div>
+        <div class="ripple-track"><div class="ripple-fill"></div></div>
+      </div>
+      <div class="nerve-body">
+        <div class="view-anatomy">
+          <p class="nerve-text">Vervoert pijn, temperatuur en tastzin van het lichaam naar de hersenen. Het Lhermitte-teken — een elektrisch schot bij bukken van de nek — is een klassiek signaal van schade in het cervicale ruggenmerg.</p>
+        </div>
+        <div class="view-mri">
+          <p class="nerve-text">Spinothalamische laesies liggen vaak in het cervicale ruggenmerg en zijn zichtbaar als T2-hyperintensiteiten. Op sagittale coupes zichtbaar als lengtelaesies — bij PPMS soms meerdere wervelniveaus beslaan.</p>
+        </div>
+        <div class="view-life">
+          <p class="nerve-text">Warm bad, sauna, of gewoon een warme dag: ineens kunnen je benen niet meer. Uhthoff in de praktijk. Het gevoel dat je lichaam je in de steek laat — maar het is tijdelijk. De temperatuur daalt, het signaal herstelt. Begrijpen waarom maakt het draaglijker.</p>
+        </div>
+        <div class="ripple-map">
+          <div class="ripple-map-title">▸ Ripple mapping — Uhthoff fenomeen</div>
+          <div class="ripple-chain">
+            <div class="ripple-node lesion-node">Laesie ruggemerg</div>
+            <div class="ripple-arrow">→</div>
+            <div class="ripple-node effect-node">Temperatuur ↑</div>
+            <div class="ripple-arrow">→</div>
+            <div class="ripple-node effect-node">Geleidbaarheid ↓</div>
+            <div class="ripple-arrow">→</div>
+            <div class="ripple-node functional-node">Uhthoff</div>
+          </div>
+        </div>
+        <div class="symptom-tags">
+          <span class="tag">Tintelingen</span><span class="tag">Gevoelloosheid</span>
+          <span class="tag">Lhermitte-teken</span><span class="tag">Uhthoff</span>
+        </div>
+        <div class="kreiter-badge">🔬 Kreiter thesis — spinale laesies · 15 juni 2026</div>
+        <div><button class="consult-btn" onclick="exportConsult('Spinothalamisch tracé')">📋 Voeg toe aan Consult View</button></div>
+      </div>
+    </div>
+
+    <!-- Denken & Geheugen -->
+    <div class="cat-header">
+      <div class="cat-label">Denken & Geheugen</div>
+      <div class="cat-line"></div>
+    </div>
+
+    <div class="nerve-card" data-id="cc" onclick="toggleCard(this)">
+      <div class="nerve-head">
+        <div class="nerve-icon">🔗</div>
+        <div class="nerve-info">
+          <div class="nerve-name">Corpus callosum</div>
+          <div class="nerve-path">Brug tussen hersenhelften — Dawson-vingers</div>
+        </div>
+        <div class="nerve-chevron">›</div>
+      </div>
+      <div class="ripple-bar">
+        <div class="ripple-label"><span>Laesie-impact verspreiding</span><span>—</span></div>
+        <div class="ripple-track"><div class="ripple-fill"></div></div>
+      </div>
+      <div class="nerve-body">
+        <div class="view-anatomy">
+          <p class="nerve-text">De grootste verbinding tussen links en rechts — 200 miljoen zenuwvezels. De "Dawson-vingers" op MRI zijn laesies loodrecht op het corpus callosum: een van de meest karakteristieke kenmerken van MS.</p>
+        </div>
+        <div class="view-mri">
+          <p class="nerve-text">Dawson-vingers zijn pathognomonisch voor MS: periventriculaire laesies loodrecht op de lange as van het corpus callosum, zichtbaar op sagittale FLAIR-beelden. Ze volgen de richting van myelinerende axonen en perivasculaire ruimtes.</p>
+        </div>
+        <div class="view-life">
+          <p class="nerve-text">Iemand vraagt iets. Je weet het antwoord — maar het duurt even voor het er is. Je bent niet dommer geworden, de verbinding is langzamer. Twee hersenhelften die iets minder snel met elkaar praten. Trage verwerking, niet verlies van kennis.</p>
+        </div>
+        <div class="ripple-map">
+          <div class="ripple-map-title">▸ Ripple mapping</div>
+          <div class="ripple-chain">
+            <div class="ripple-node lesion-node">Dawson-vinger</div>
+            <div class="ripple-arrow">→</div>
+            <div class="ripple-node effect-node">Interhemisferische verbinding ↓</div>
+            <div class="ripple-arrow">→</div>
+            <div class="ripple-node functional-node">Trage verwerking</div>
+          </div>
+        </div>
+        <div class="symptom-tags">
+          <span class="tag">Geheugenproblemen</span><span class="tag">Concentratie</span>
+          <span class="tag">Trage verwerking</span>
+        </div>
+        <div><button class="consult-btn" onclick="exportConsult('Corpus callosum')">📋 Voeg toe aan Consult View</button></div>
+      </div>
+    </div>
+
+    <div class="nerve-card" data-id="ft" onclick="toggleCard(this)">
+      <div class="nerve-head">
+        <div class="nerve-icon">💭</div>
+        <div class="nerve-info">
+          <div class="nerve-name">Fronto-thalamische banen</div>
+          <div class="nerve-path">Planning ↔ geheugen ↔ emotie</div>
+        </div>
+        <div class="nerve-chevron">›</div>
+      </div>
+      <div class="ripple-bar">
+        <div class="ripple-label"><span>Laesie-impact verspreiding</span><span>—</span></div>
+        <div class="ripple-track"><div class="ripple-fill"></div></div>
+      </div>
+      <div class="nerve-body">
+        <div class="view-anatomy">
+          <p class="nerve-text">Verbindt de prefrontale cortex (plannen, beslissen) met de thalamus (informatie sorteren) en hippocampus (opslaan). Schade hier verklaart moeite met woorden vinden, getallen uitspreken en emotieregulatie.</p>
+        </div>
+        <div class="view-mri">
+          <p class="nerve-text">Thalamische laesies zijn op standaard MRI moeilijker te zien maar klinisch zeer impactvol. Diffusion tensor imaging (DTI) toont witte-stofschade in fronto-thalamische projecties — een gebied van toenemend onderzoeksbelang bij cognitieve MS-klachten.</p>
+        </div>
+        <div class="view-life">
+          <p class="nerve-text">Het getal dat je wil zeggen, komt er niet uit. Je kent het woord — maar het blijft hangen. Of je reageert emotioneler dan je zou willen, en weet zelf niet waarom. Dit zijn geen karaktertrekken. Dit zijn tracé-laesies.</p>
+        </div>
+        <div class="ripple-map">
+          <div class="ripple-map-title">▸ Ripple mapping</div>
+          <div class="ripple-chain">
+            <div class="ripple-node lesion-node">Laesie fronto-thalamisch</div>
+            <div class="ripple-arrow">→</div>
+            <div class="ripple-node effect-node">Informatiesortering verstoord</div>
+            <div class="ripple-arrow">→</div>
+            <div class="ripple-node functional-node">Woordvinding</div>
+            <div class="ripple-arrow">→</div>
+            <div class="ripple-node functional-node">Emotielabiliteit</div>
+          </div>
+        </div>
+        <div class="symptom-tags">
+          <span class="tag">Woordvinden</span><span class="tag">Emotielabiliteit</span>
+          <span class="tag">Planning</span><span class="tag">Getallen</span>
+        </div>
+        <div><button class="consult-btn" onclick="exportConsult('Fronto-thalamische banen')">📋 Voeg toe aan Consult View</button></div>
+      </div>
+    </div>
+
+    <!-- Energie & Visus & Autonoom -->
+    <div class="cat-header">
+      <div class="cat-label">Energie & Visus & Autonoom</div>
+      <div class="cat-line"></div>
+    </div>
+
+    <div class="nerve-card" data-id="ras" onclick="toggleCard(this)">
+      <div class="nerve-head">
+        <div class="nerve-icon">🔋</div>
+        <div class="nerve-info">
+          <div class="nerve-name">Reticulair activatiesysteem</div>
+          <div class="nerve-path">Alertheid & energie — hersenstam</div>
+        </div>
+        <div class="nerve-chevron">›</div>
+      </div>
+      <div class="ripple-bar">
+        <div class="ripple-label"><span>Laesie-impact verspreiding</span><span>—</span></div>
+        <div class="ripple-track"><div class="ripple-fill"></div></div>
+      </div>
+      <div class="nerve-body">
+        <div class="view-anatomy">
+          <p class="nerve-text">Regelt bewustzijn, alertheid en de slaap-waakcyclus vanuit de hersenstam. Bij MS is dit een van de neurologische verklaringen voor MS-vermoeidheid: de batterij laadt niet op, ook niet na rust.</p>
+        </div>
+        <div class="view-mri">
+          <p class="nerve-text">Hersenstamlaesies zijn zichtbaar op T2/FLAIR maar vereisen dunne coupes en specifieke sequences. Functionele MRI toont verminderde connectivity in het default mode network bij MS-patiënten met vermoeidheid — ook zonder zichtbare structurele laesies op die locatie.</p>
+        </div>
+        <div class="view-life">
+          <p class="nerve-text">Je hebt geslapen. Je bent uitgerust. En toch is je energie om 11 uur 's ochtends al op. Dit is geen luiheid, geen depressie, geen aanstellen. Dit is een neurobiologisch systeem dat zijn brandstoftank niet kan vullen. MS-vermoeidheid is een van de meest onderschatte symptomen.</p>
+        </div>
+        <div class="ripple-map">
+          <div class="ripple-map-title">▸ Ripple mapping — MS-vermoeidheid</div>
+          <div class="ripple-chain">
+            <div class="ripple-node lesion-node">Hersenstam laesie</div>
+            <div class="ripple-arrow">→</div>
+            <div class="ripple-node effect-node">RAS activatie ↓</div>
+            <div class="ripple-arrow">→</div>
+            <div class="ripple-node functional-node">Energietekort</div>
+            <div class="ripple-arrow">→</div>
+            <div class="ripple-node functional-node">Slaapstoornis</div>
+          </div>
+        </div>
+        <div class="symptom-tags">
+          <span class="tag">MS-vermoeidheid</span><span class="tag">Energieschommelingen</span>
+          <span class="tag">Slaapproblemen</span>
+        </div>
+        <div><button class="consult-btn" onclick="exportConsult('Reticulair activatiesysteem')">📋 Voeg toe aan Consult View</button></div>
+      </div>
+    </div>
+
+    <div class="nerve-card" data-id="vis" onclick="toggleCard(this)">
+      <div class="nerve-head">
+        <div class="nerve-icon">👁️</div>
+        <div class="nerve-info">
+          <div class="nerve-name">Visuele baan & oogzenuw</div>
+          <div class="nerve-path">Oog → chiasma → visuele cortex</div>
+        </div>
+        <div class="nerve-chevron">›</div>
+      </div>
+      <div class="ripple-bar">
+        <div class="ripple-label"><span>Laesie-impact verspreiding</span><span>—</span></div>
+        <div class="ripple-track"><div class="ripple-fill"></div></div>
+      </div>
+      <div class="nerve-body">
+        <div class="view-anatomy">
+          <p class="nerve-text">De oogzenuw is een van de eerste en meest kwetsbare structuren bij MS. Neuritis optica — ontsteking van de oogzenuw — is bij velen het eerste symptoom. Pijn achter het oog, wazig zien, kleurverlies.</p>
+        </div>
+        <div class="view-mri">
+          <p class="nerve-text">Optische neuritis is zichtbaar op fat-suppressed T2 of STIR sequences als T2-hyperintensiteit in de nervus opticus. OCT (optical coherence tomography) toont retinale zenuwvezelatrofie — een directe maat voor axonaal verlies, ook na herstel van visus.</p>
+        </div>
+        <div class="view-life">
+          <p class="nerve-text">Je ziet ineens minder scherp aan één kant. Of kleuren zijn fletser. Of bewegen doet pijn achter je oog. Neuritis optica trekt in weken voorbij — maar de kleurperceptie herstelt soms niet volledig. Groen ziet er anders uit dan vroeger.</p>
+        </div>
+        <div class="ripple-map">
+          <div class="ripple-map-title">▸ Ripple mapping</div>
+          <div class="ripple-chain">
+            <div class="ripple-node lesion-node">Nervus opticus laesie</div>
+            <div class="ripple-arrow">→</div>
+            <div class="ripple-node effect-node">Signaaloverdracht ↓</div>
+            <div class="ripple-arrow">→</div>
+            <div class="ripple-node functional-node">Wazig zien</div>
+            <div class="ripple-arrow">→</div>
+            <div class="ripple-node functional-node">Kleurverlies</div>
+          </div>
+        </div>
+        <div class="symptom-tags">
+          <span class="tag">Wazig zien</span><span class="tag">Pijn achter oog</span>
+          <span class="tag">Dubbelzien</span><span class="tag">Neuritis optica</span>
+        </div>
+        <div><button class="consult-btn" onclick="exportConsult('Visuele baan & oogzenuw')">📋 Voeg toe aan Consult View</button></div>
+      </div>
+    </div>
+
+    <div class="nerve-card" data-id="aut" onclick="toggleCard(this)">
+      <div class="nerve-head">
+        <div class="nerve-icon">🔄</div>
+        <div class="nerve-info">
+          <div class="nerve-name">Autonome zenuwbanen</div>
+          <div class="nerve-path">Blaas · darmen · temperatuur · hart</div>
+        </div>
+        <div class="nerve-chevron">›</div>
+      </div>
+      <div class="ripple-bar">
+        <div class="ripple-label"><span>Laesie-impact verspreiding</span><span>—</span></div>
+        <div class="ripple-track"><div class="ripple-fill"></div></div>
+      </div>
+      <div class="nerve-body">
+        <div class="view-anatomy">
+          <p class="nerve-text">Het autonome zenuwstelsel regelt wat je niet bewust aanstuurt. Tot 80% van mensen met MS heeft blaasproblemen — vaak onbesproken in de spreekkamer. Ook temperatuurregulatie en seksuele functie vallen hieronder.</p>
+        </div>
+        <div class="view-mri">
+          <p class="nerve-text">Autonome laesies liggen vaak in het ruggenmerg (sacrale segmenten voor blaas/darm) en de hypothalamus (temperatuurregulatie). Ze zijn op standaard MRI zichtbaar maar worden klinisch onderschat — routinevragenlijsten voor blaas en darmfunctie zijn essentieel.</p>
+        </div>
+        <div class="view-life">
+          <p class="nerve-text">Naar het toilet moeten — nu. Of juist niet kunnen. Je lichaam dat zijn eigen temperatuur niet regelt. Dit zijn symptomen die mensen zelden bespreken maar die dagelijks leven ingrijpend beïnvloeden. Schaamte is onnodig: het zijn laesies, geen falen.</p>
+        </div>
+        <div class="ripple-map">
+          <div class="ripple-map-title">▸ Ripple mapping</div>
+          <div class="ripple-chain">
+            <div class="ripple-node lesion-node">Sacrale laesie</div>
+            <div class="ripple-arrow">→</div>
+            <div class="ripple-node effect-node">Blaascontrole verstoord</div>
+            <div class="ripple-arrow">→</div>
+            <div class="ripple-node functional-node">Urgentie</div>
+            <div class="ripple-arrow">→</div>
+            <div class="ripple-node functional-node">Sociale impact</div>
+          </div>
+        </div>
+        <div class="symptom-tags">
+          <span class="tag">Blaasproblemen</span><span class="tag">Temperatuur</span>
+          <span class="tag">Darmklachten</span>
+        </div>
+        <div><button class="consult-btn" onclick="exportConsult('Autonome zenuwbanen')">📋 Voeg toe aan Consult View</button></div>
+      </div>
+    </div>
+
+  </div><!-- /kaart -->
+
+  <!-- Consult View panel -->
+  <div id="consult-panel" style="display:none;background:rgba(26,191,160,.06);border:1px solid rgba(26,191,160,.25);border-radius:var(--r);padding:16px 20px;margin:20px 0;">
+    <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--teal);text-transform:uppercase;margin-bottom:8px;">📋 Consult View — geselecteerde banen</div>
+    <div id="consult-list" style="font-size:12px;color:#C0D4E8;line-height:1.8;"></div>
+    <button onclick="printConsult()" style="margin-top:10px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:7px 14px;border-radius:20px;background:var(--teal);color:var(--deep);border:none;cursor:pointer;font-weight:700;">🖨 Afdrukken / Opslaan als PDF</button>
+    <button onclick="clearConsult()" style="margin-top:10px;margin-left:8px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:7px 14px;border-radius:20px;background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,.1);cursor:pointer;">✕ Wissen</button>
   </div>
 
-  <!-- ZONE 2: ROUTING -->
-  <div class="zone">
-    <div class="zone-label">Zone 2 — Routing</div>
-    <h2>Je hebt iets te horen gekregen dat <em>alles verandert.</em></h2>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:4px">Je bent hier op de juiste plek. Geen jargon. Geen oordeel.<br>Alleen begrip — van iemand die het zelf leeft.</p>
-    <div class="routing-options">
-      <a class="routing-option" href="#"><div class="routing-num">1</div>Ik heb net de diagnose MS gekregen</a>
-      <a class="routing-option" href="#"><div class="routing-num">2</div>Ik wil begrijpen wat MS doet in mijn lichaam</a>
-      <a class="routing-option" href="#"><div class="routing-num">3</div>Iemand die ik ken heeft MS — ik zoek begrip</a>
+  <!-- Quote -->
+  <div class="quote-block">
+    "Als ik 20 jaar geleden een kaart had gehad van mijn zenuwstelsel — niet als plakjes op een MRI, maar als één levend, bewegend systeem — had ik misschien eerder begrepen wat er met mij gebeurde. Dat is wat ForwardJuntos bouwt. Niet voor later. Voor nu."
+    <div class="quote-author">— Dominique Hermans · ForwardJuntos · Heerlen</div>
+  </div>
+
+  <!-- wildDISCO -->
+  <div class="future-section">
+    <div class="future-label">✦ Toekomst — wildDISCO</div>
+    <div class="future-title">Het hele zenuwstelsel. <em>In 3D. In één scan.</em></div>
+    <div class="future-sub">Helmholtz Center München · gepubliceerd 2024</div>
+
+    <div class="future-grid">
+      <div class="future-card">
+        <div class="future-card-icon">🔬</div>
+        <div class="future-card-title">Wat is wildDISCO?</div>
+        <div class="future-card-text">Antilichamen doordringen het volledige lichaam van een muis — spieren, botten, hersenen en ruggenmerg. Optisch transparant gemaakt en gefotografeerd op celniveau. Het gehele zenuwstelsel in één beeld.</div>
+      </div>
+      <div class="future-card">
+        <div class="future-card-icon">🧠</div>
+        <div class="future-card-title">Relevant voor MS</div>
+        <div class="future-card-text">Laesies zijn niet meer geïsoleerde vlekjes op een MRI — ze worden onderdeel van een systeem. Zenuwbaanschade én immuunrespons in het hele lichaam tegelijk zichtbaar.</div>
+      </div>
+      <div class="future-card">
+        <div class="future-card-icon">🦠</div>
+        <div class="future-card-title">Darm-brein connectie</div>
+        <div class="future-card-text">Muizen zonder darmbacteriën hadden een minder dicht zenuwnetwerk. Het microbioom speelt een rol in de ontwikkeling van het zenuwstelsel — opkomend MS-onderzoeksgebied.</div>
+      </div>
+      <div class="future-card">
+        <div class="future-card-icon">🤖</div>
+        <div class="future-card-title">Digitale breintwins</div>
+        <div class="future-card-text">AI analyseert de 3D-beelden, herkent patronen en voorspelt kwetsbare banen — vóórdat schade klinisch zichtbaar is. ForwardJuntos als brug naar preventieve mapping.</div>
+      </div>
+    </div>
+
+    <div class="roadmap">
+      <div class="roadmap-item">
+        <div class="roadmap-dot done"></div>
+        <div class="roadmap-text"><strong>Nu:</strong> wildDISCO voor muizen — volledig zenuwstelsel in 3D zichtbaar</div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-dot done"></div>
+        <div class="roadmap-text"><strong>Nu:</strong> Menselijk weefsel ex vivo — Amsterdam UMC MS Centrum technieken</div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-dot near"></div>
+        <div class="roadmap-text"><strong>Nabij:</strong> AI-analyse van 3D-beelden — patronen en kwetsbare banen herkennen</div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-dot future"></div>
+        <div class="roadmap-text"><strong>Toekomst:</strong> Digitale breintwins voor levende patiënten — preventieve mapping standaard in zorg</div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-dot" style="background:var(--teal);box-shadow:0 0 8px var(--teal);"></div>
+        <div class="roadmap-text"><strong>ForwardJuntos:</strong> De brug — wetenschappelijke kennis toegankelijk maken voordat het mainstream is</div>
+      </div>
     </div>
   </div>
 
-  <!-- ZONE 3: VERBINDING & ACTIE -->
-  <div class="zone">
-    <div class="zone-label">Zone 3 — Verbinding &amp; actie</div>
-    <div class="quote-block">"Ik kreeg dezelfde diagnose. Dit is wat ik wou dat iemand me had laten zien — voordat de onzekerheid groter werd dan het begrip."<br><br>— Dominique · oprichter ForwardJuntos · leeft met MS</div>
-    <div class="features">
-      <div class="feature"><div class="feature-num">1</div><div><div class="feature-title">Collision Avoidance — Ruimte</div><div class="feature-desc">De app dringt zich nooit op. Jij bepaalt het tempo. Geen volgende stap die je niet zelf zet.</div></div></div>
-      <div class="feature"><div class="feature-num">2</div><div><div class="feature-title">Velocity Matching — Tempo</div><div class="feature-desc">Het systeem past zich aan jouw energieniveau aan. Net gediagnosticeerd of al jaren verder — de app beweegt met jou mee.</div></div></div>
-      <div class="feature"><div class="feature-num">3</div><div><div class="feature-title">Flock Centering — Verbinding</div><div class="feature-desc">Je bent niet alleen. De community vormt zich organisch — niet omdat het moet, maar omdat gedeelde ervaring trekt.</div></div></div>
+  <!-- Pro CTA deeplink (Upgrade 5) -->
+  <div style="margin:40px 0 0;padding:24px;background:var(--mid);border-radius:var(--r);border:1px solid rgba(255,255,255,.06);position:relative;overflow:hidden;">
+    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--teal),var(--blue));"></div>
+    <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Voor professionals &amp; partners</div>
+    <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+      <span style="font-size:10px;color:var(--teal);background:rgba(26,191,160,.1);border:1px solid rgba(26,191,160,.2);padding:3px 9px;border-radius:20px;">Brightlands Campus</span>
+      <span style="font-size:10px;color:var(--teal);background:rgba(26,191,160,.1);border:1px solid rgba(26,191,160,.2);padding:3px 9px;border-radius:20px;">Holoxica</span>
+      <span style="font-size:10px;color:var(--teal);background:rgba(26,191,160,.1);border:1px solid rgba(26,191,160,.2);padding:3px 9px;border-radius:20px;">Neurologen</span>
+      <span style="font-size:10px;color:var(--teal);background:rgba(26,191,160,.1);border:1px solid rgba(26,191,160,.2);padding:3px 9px;border-radius:20px;">Onderzoekers</span>
     </div>
-    <div class="cta-row">
-      <a class="cta-main" href="#">Bekijk de kaart van je zenuwstelsel →</a>
-      <span class="cta-sub">Geen registratie · Geen kosten · Alleen begrip</span>
-    </div>
-  </div>
-
-  <!-- UPGRADE 5: PRO CTA -->
-  <div class="pro-cta">
-    <div class="pro-cta-label">Voor professionals &amp; partners</div>
-    <div class="pro-who">
-      <span class="pro-who-tag">Brightlands Campus</span>
-      <span class="pro-who-tag">Holoxica</span>
-      <span class="pro-who-tag">Neurologen</span>
-      <span class="pro-who-tag">Onderzoekers</span>
-    </div>
-    <div class="pro-cta-title">Bekijk het volledige samenwerkingsvoorstel</div>
-    <div class="pro-cta-sub">
-      ForwardJuntos × Brightlands Campus · Versie 5.0 · Juni 2026<br>
-      18-maanden roadmap · Hardware ecosystem · Wetenschappelijke verankering
-    </div>
-    <div class="pro-cta-buttons">
-      <a class="pro-btn pro-btn-primary"
-         href="https://uniqueecuador.github.io/ForwardJuntos_Brightlands-V4/"
-         target="_blank" rel="noopener">
+    <div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px;">Bekijk het volledige samenwerkingsvoorstel</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:16px;line-height:1.6;">ForwardJuntos × Brightlands Campus · Versie 5.0 · Juni 2026<br>18-maanden roadmap · Hardware ecosystem · Wetenschappelijke verankering</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <a href="https://uniqueecuador.github.io/ForwardJuntos_Brightlands-V4/"
+         target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;font-size:12px;font-weight:700;padding:10px 18px;border-radius:24px;text-decoration:none;background:linear-gradient(135deg,var(--teal),var(--blue));color:var(--deep);box-shadow:0 4px 16px rgba(26,191,160,.25);">
         Voorstel v5.0 bekijken →
       </a>
-      <a class="pro-btn pro-btn-secondary" href="mailto:info@forwardjuntos.nl">
+      <a href="mailto:info@forwardjuntos.nl"
+         style="display:inline-flex;align-items:center;font-size:12px;font-weight:700;padding:10px 18px;border-radius:24px;text-decoration:none;color:var(--muted);border:1px solid rgba(255,255,255,.1);">
         Direct contact
       </a>
     </div>
   </div>
 
   <footer>
-    ForwardJuntos · Wireframe v2.2 · Flock Formation · Juni 2026
+    <div class="footer-disclaimer">
+      ⚕ Deze visualisatie is educatief en ondersteunend — geen medisch advies.<br>
+      Bespreek klachten altijd met je neuroloog of MS-verpleegkundige.<br>
+      Bronnen: Nederlands Herseninstituut · Amsterdam UMC MS Centrum · Nivel 2025 · Helmholtz Center München (wildDISCO 2024)
+    </div>
+    <div class="footer-tagline" style="margin-top:12px;">"Vooruit, samen — <span>Forward Juntos</span>"</div>
+    <div style="font-family:'DM Mono',monospace;font-size:9px;color:rgba(107,140,174,.4);margin-top:8px;">
+      forwardjuntos.nl · Dominique Hermans · Juni 2026 · Zenuwkaart V3
+    </div>
   </footer>
-</div>
+
+</div><!-- /wrap -->
+
+<button class="stbtn" id="stbtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <script>
-// ═══════════════════════════════════════════════════════
-// UPGRADE 4 — NEURON CANVAS ANIMATIE
-// Drie staten: gezond / verstoord / herstel
-// ═══════════════════════════════════════════════════════
+// ── Mode toggle ──
+let currentMode = 'anatomy';
+function setMode(m, btn) {
+  currentMode = m;
+  document.getElementById('kaart').className = 'mode-' + m;
+  document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const labels = {anatomy:'Anatomie', mri:'MRI-stijl', life:'Dagelijks leven'};
+  document.getElementById('view-label').textContent = labels[m];
+}
 
+// ── Card toggle ──
+let activeCount = 0;
+function toggleCard(card) {
+  const wasActive = card.classList.contains('active');
+  card.classList.toggle('active');
+  if (!wasActive) {
+    activeCount++;
+    // animate ripple fill
+    const fill = card.querySelector('.ripple-fill');
+    if (fill) { fill.style.animation = 'none'; fill.offsetHeight; fill.style.animation = ''; }
+  } else {
+    activeCount = Math.max(0, activeCount - 1);
+  }
+  document.getElementById('active-count').textContent = activeCount;
+}
+
+// ── Canvas Neuron Animatie (Upgrade 4) ──────────────────
 const canvas = document.getElementById('neuronCanvas');
 const ctx = canvas.getContext('2d');
 
-// ── Staat configuratie ──────────────────────────────────
 const STAGES = {
   gezond: {
-    color: '#1abfa0', glow: 'rgba(26,191,160,',
-    dotColor: '#1abfa0', name: 'GEZOND SIGNAAL',
-    desc: 'Myeline intact · signaal reist snel en helder',
-    signalSpeed: 3.2, signalOpacity: 1,
-    noiseAmp: 0, breakAt: -1,
-    pathColor: 'rgba(26,191,160,0.3)',
+    color:'#1ABFA0', glow:'rgba(26,191,160,',
+    name:'GEZOND SIGNAAL', desc:'Myeline intact · signaal reist snel en helder',
+    signalSpeed:3.2, signalOpacity:1, noiseAmp:0, breakAt:-1,
+    pathColor:'rgba(26,191,160,0.25)',
   },
   verstoord: {
-    color: '#ff6b6b', glow: 'rgba(255,107,107,',
-    dotColor: '#ff6b6b', name: 'VERSTOORD · LAESIE',
-    desc: 'Demyelinisatie · signaal blokkeert bij de laesie',
-    signalSpeed: 1.8, signalOpacity: 0.6,
-    noiseAmp: 4, breakAt: 0.52,
-    pathColor: 'rgba(255,107,107,0.2)',
+    color:'#FF6B6B', glow:'rgba(255,107,107,',
+    name:'VERSTOORD · LAESIE', desc:'Demyelinisatie · signaal blokkeert bij de laesie',
+    signalSpeed:1.6, signalOpacity:0.55, noiseAmp:4, breakAt:0.52,
+    pathColor:'rgba(255,107,107,0.18)',
   },
   herstel: {
-    color: '#2e7dd4', glow: 'rgba(46,125,212,',
-    dotColor: '#2e7dd4', name: 'HERSTEL · NIEUWE ROUTE',
-    desc: 'Neuroplasticiteit · alternatief pad gevormd',
-    signalSpeed: 2.4, signalOpacity: 0.85,
-    noiseAmp: 0, breakAt: -1,
-    pathColor: 'rgba(46,125,212,0.25)',
-    detour: true,
+    color:'#2E7DD4', glow:'rgba(46,125,212,',
+    name:'HERSTEL · NIEUWE ROUTE', desc:'Neuroplasticiteit · alternatief pad gevormd',
+    signalSpeed:2.4, signalOpacity:0.85, noiseAmp:0, breakAt:-1,
+    pathColor:'rgba(46,125,212,0.22)', detour:true,
   },
 };
 
 let stage = 'gezond';
-let t = 0;
-let signalT = 0;
-let transitioning = false;
-let transitionProgress = 0;
-let prevStage = 'gezond';
-let animId;
+let t = 0, signalT = 0;
 
-// ── Resize canvas ───────────────────────────────────────
-function resize() {
-  const rect = canvas.parentElement.getBoundingClientRect();
-  canvas.width  = rect.width;
-  canvas.height = 200;
+function resizeCanvas() {
+  const w = canvas.parentElement.getBoundingClientRect().width;
+  canvas.width  = w;
+  canvas.height = 180;
 }
-resize();
-window.addEventListener('resize', () => { resize(); });
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
 
-// ── Neuron nodes ────────────────────────────────────────
 function getNodes() {
-  const W = canvas.width, H = canvas.height;
-  const cx = W / 2, cy = H / 2;
+  const W = canvas.width, cy = canvas.height / 2;
   return [
-    { x: W * 0.08, y: cy },         // 0: start
-    { x: W * 0.25, y: cy - 20 },    // 1
-    { x: W * 0.42, y: cy + 10 },    // 2
-    { x: W * 0.58, y: cy - 15 },    // 3 — laesie punt
-    { x: W * 0.74, y: cy + 5 },     // 4
-    { x: W * 0.92, y: cy },         // 5: eind
+    {x:W*.07, y:cy},
+    {x:W*.24, y:cy-18},
+    {x:W*.42, y:cy+10},
+    {x:W*.58, y:cy-14},
+    {x:W*.76, y:cy+8},
+    {x:W*.93, y:cy},
+  ];
+}
+function getDetour() {
+  const W = canvas.width, cy = canvas.height / 2;
+  return [
+    {x:W*.42, y:cy+10},
+    {x:W*.50, y:cy+52},
+    {x:W*.58, y:cy+56},
+    {x:W*.68, y:cy+36},
+    {x:W*.76, y:cy+8},
   ];
 }
 
-function getDetourNodes() {
-  const W = canvas.width, H = canvas.height;
-  const cy = H / 2;
-  return [
-    { x: W * 0.42, y: cy + 10 },    // vanaf node 2
-    { x: W * 0.50, y: cy + 55 },    // omweg laag
-    { x: W * 0.58, y: cy + 60 },
-    { x: W * 0.66, y: cy + 40 },
-    { x: W * 0.74, y: cy + 5 },     // aansluit node 4
-  ];
-}
-
-// ── Bezier punt op pad ──────────────────────────────────
-function pointOnPath(nodes, t) {
+function ptOnPath(nodes, t) {
   const segs = nodes.length - 1;
-  const seg = Math.min(Math.floor(t * segs), segs - 1);
-  const lt  = (t * segs) - seg;
-  const a = nodes[seg], b = nodes[seg + 1];
-  // cubic bezier met control points
-  const cpx1 = a.x + (b.x - a.x) * 0.4;
-  const cpy1 = a.y - 18;
-  const cpx2 = a.x + (b.x - a.x) * 0.6;
-  const cpy2 = b.y + 18;
-  const u = 1 - lt;
+  const seg  = Math.min(Math.floor(t * segs), segs - 1);
+  const lt   = t * segs - seg;
+  const a = nodes[seg], b = nodes[seg+1];
+  const cpx1 = a.x+(b.x-a.x)*.4, cpy1 = a.y-16;
+  const cpx2 = a.x+(b.x-a.x)*.6, cpy2 = b.y+16;
+  const u = 1-lt;
   return {
     x: u*u*u*a.x + 3*u*u*lt*cpx1 + 3*u*lt*lt*cpx2 + lt*lt*lt*b.x,
     y: u*u*u*a.y + 3*u*u*lt*cpy1 + 3*u*lt*lt*cpy2 + lt*lt*lt*b.y,
   };
 }
 
-// ── Teken pad ───────────────────────────────────────────
-function drawPath(nodes, color, lineWidth, dashed) {
+function drawPath(nodes, color, lw, dashed) {
   ctx.beginPath();
   ctx.moveTo(nodes[0].x, nodes[0].y);
-  for (let i = 1; i < nodes.length; i++) {
-    const a = nodes[i-1], b = nodes[i];
-    const cpx1 = a.x + (b.x - a.x) * 0.4, cpy1 = a.y - 18;
-    const cpx2 = a.x + (b.x - a.x) * 0.6, cpy2 = b.y + 18;
-    ctx.bezierCurveTo(cpx1, cpy1, cpx2, cpy2, b.x, b.y);
+  for (let i=1; i<nodes.length; i++) {
+    const a=nodes[i-1], b=nodes[i];
+    ctx.bezierCurveTo(
+      a.x+(b.x-a.x)*.4, a.y-16,
+      a.x+(b.x-a.x)*.6, b.y+16,
+      b.x, b.y
+    );
   }
   ctx.strokeStyle = color;
-  ctx.lineWidth = lineWidth;
-  if (dashed) ctx.setLineDash([5, 8]);
-  else ctx.setLineDash([]);
+  ctx.lineWidth   = lw;
+  ctx.setLineDash(dashed ? [5,8] : []);
   ctx.stroke();
   ctx.setLineDash([]);
 }
 
-// ── Teken node ──────────────────────────────────────────
-function drawNode(x, y, color, glow, size, glowAmt) {
-  ctx.save();
-  ctx.shadowColor = glow + '0.7)';
-  ctx.shadowBlur  = glowAmt;
-  ctx.beginPath();
-  ctx.arc(x, y, size, 0, Math.PI * 2);
-  ctx.fillStyle = color;
-  ctx.fill();
-  ctx.restore();
-}
-
-// ── Teken myeline segmenten ─────────────────────────────
-function drawMyelin(nodes, color, broken, breakAt) {
-  for (let i = 0; i < nodes.length - 1; i++) {
-    const segStart = i / (nodes.length - 1);
-    const segEnd   = (i + 1) / (nodes.length - 1);
-    if (broken && breakAt >= segStart && breakAt <= segEnd) {
-      // gebroken segment — korter
-      const a = nodes[i], b = nodes[i + 1];
-      ctx.save();
-      ctx.globalAlpha = 0.3;
-      drawPath([a, b], '#ff6b6b', 12, false);
-      // laesie markering
-      const mid = pointOnPath(nodes, breakAt);
-      ctx.shadowColor = 'rgba(255,107,107,0.8)';
-      ctx.shadowBlur  = 20;
-      ctx.beginPath();
-      ctx.arc(mid.x, mid.y, 8, 0, Math.PI * 2);
-      ctx.fillStyle = '#ff4444';
-      ctx.fill();
-      // X markering
-      ctx.globalAlpha = 1;
-      ctx.strokeStyle = '#fff';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(mid.x - 5, mid.y - 5); ctx.lineTo(mid.x + 5, mid.y + 5);
-      ctx.moveTo(mid.x + 5, mid.y - 5); ctx.lineTo(mid.x - 5, mid.y + 5);
-      ctx.stroke();
-      ctx.restore();
-    } else {
-      ctx.save();
-      drawPath([nodes[i], nodes[i+1]], color + '0.18)', 12, false);
-      ctx.restore();
-    }
-  }
-}
-
-// ── Teken signaal ───────────────────────────────────────
-function drawSignal(pos, color, glow, opacity, size) {
+function drawSignal(pos, color, glow, opacity, r) {
   ctx.save();
   ctx.globalAlpha = opacity;
-  ctx.shadowColor = glow + '1)';
-  ctx.shadowBlur  = 24;
-  ctx.beginPath();
-  ctx.arc(pos.x, pos.y, size, 0, Math.PI * 2);
-  ctx.fillStyle = color;
-  ctx.fill();
-  // halo
-  ctx.globalAlpha = opacity * 0.25;
-  ctx.beginPath();
-  ctx.arc(pos.x, pos.y, size + 6, 0, Math.PI * 2);
-  ctx.fillStyle = color;
-  ctx.fill();
+  ctx.shadowColor = glow+'1)';
+  ctx.shadowBlur  = 22;
+  ctx.beginPath(); ctx.arc(pos.x, pos.y, r, 0, Math.PI*2);
+  ctx.fillStyle = color; ctx.fill();
+  ctx.globalAlpha = opacity * .22;
+  ctx.beginPath(); ctx.arc(pos.x, pos.y, r+6, 0, Math.PI*2);
+  ctx.fillStyle = color; ctx.fill();
   ctx.restore();
 }
 
-// ── Noise ───────────────────────────────────────────────
 function noise(t, amp) {
-  return amp * (Math.sin(t * 7.3) * 0.5 + Math.sin(t * 13.1) * 0.3 + Math.sin(t * 3.7) * 0.2);
+  return amp*(Math.sin(t*7.3)*.5 + Math.sin(t*13.1)*.3 + Math.sin(t*3.7)*.2);
 }
 
-// ── Hoofd render loop ───────────────────────────────────
-function draw() {
+function drawFrame() {
   const W = canvas.width, H = canvas.height;
   ctx.clearRect(0, 0, W, H);
-
-  const cfg  = STAGES[stage];
-  const prev = STAGES[prevStage];
+  const cfg   = STAGES[stage];
   const nodes = getNodes();
-  const detour = getDetourNodes();
-
-  t += 0.012;
+  const det   = getDetour();
+  t += 0.013;
   signalT += cfg.signalSpeed * 0.004;
   if (signalT > 1) signalT = 0;
 
-  // transitie
-  if (transitioning) {
-    transitionProgress += 0.04;
-    if (transitionProgress >= 1) { transitioning = false; transitionProgress = 1; }
+  // myeline coating
+  for (let i=0; i<nodes.length-1; i++) {
+    const sS = i/(nodes.length-1), sE=(i+1)/(nodes.length-1);
+    if (cfg.breakAt>0 && cfg.breakAt>=sS && cfg.breakAt<=sE) {
+      ctx.globalAlpha = .25;
+      drawPath([nodes[i],nodes[i+1]], '#FF6B6B', 11, false);
+      ctx.globalAlpha = 1;
+      const mid = ptOnPath(nodes, cfg.breakAt);
+      ctx.save();
+      ctx.shadowColor='rgba(255,107,107,.9)'; ctx.shadowBlur=18;
+      ctx.beginPath(); ctx.arc(mid.x, mid.y, 7, 0, Math.PI*2);
+      ctx.fillStyle='#FF4444'; ctx.fill();
+      ctx.strokeStyle='#fff'; ctx.lineWidth=2;
+      ctx.beginPath();
+      ctx.moveTo(mid.x-4,mid.y-4); ctx.lineTo(mid.x+4,mid.y+4);
+      ctx.moveTo(mid.x+4,mid.y-4); ctx.lineTo(mid.x-4,mid.y+4);
+      ctx.stroke(); ctx.restore();
+    } else {
+      ctx.globalAlpha = .15;
+      drawPath([nodes[i],nodes[i+1]], cfg.color, 11, false);
+      ctx.globalAlpha = 1;
+    }
   }
 
-  // myeline laag
-  drawMyelin(nodes, cfg.glow, cfg.breakAt > 0, cfg.breakAt);
-
-  // detour pad (herstel)
-  if (stage === 'herstel') {
-    ctx.globalAlpha = 0.6;
-    drawPath(detour, 'rgba(46,125,212,0.5)', 2, true);
+  // detour pad bij herstel
+  if (cfg.detour) {
+    ctx.globalAlpha = .5;
+    drawPath(det, 'rgba(46,125,212,.55)', 2, true);
     ctx.globalAlpha = 1;
   }
 
   // hoofd pad
-  drawPath(nodes, cfg.pathColor, 2.5, false);
+  drawPath(nodes, cfg.pathColor, 2, false);
 
   // nodes
   nodes.forEach((n, i) => {
-    const isEnd   = i === 0 || i === nodes.length - 1;
-    const isLesie = cfg.breakAt > 0 && Math.abs(i / (nodes.length-1) - cfg.breakAt) < 0.2;
-    const color   = isLesie ? '#ff4444' : cfg.color;
-    const glow    = isLesie ? 'rgba(255,68,68,' : cfg.glow;
-    const pulse   = isEnd ? 1 + 0.12 * Math.sin(t * 2 + i) : 1;
-    drawNode(n.x, n.y, color, glow, isEnd ? 7 * pulse : 4.5, isEnd ? 16 : 8);
+    const isEnd = i===0 || i===nodes.length-1;
+    const nearLesion = cfg.breakAt>0 && Math.abs(i/(nodes.length-1)-cfg.breakAt)<.18;
+    const col  = nearLesion ? '#FF4444' : cfg.color;
+    const glow = nearLesion ? 'rgba(255,68,68,' : cfg.glow;
+    const sz   = isEnd ? 7*(1+.1*Math.sin(t*2+i)) : 4.5;
+    ctx.save();
+    ctx.shadowColor=glow+'.7)'; ctx.shadowBlur=isEnd?16:8;
+    ctx.beginPath(); ctx.arc(n.x, n.y, sz, 0, Math.PI*2);
+    ctx.fillStyle=col; ctx.fill();
+    ctx.restore();
+  });
+
+  // labels
+  ctx.font = '9px DM Mono, Courier New, monospace';
+  ctx.fillStyle = 'rgba(107,140,174,.65)';
+  ctx.textAlign = 'center';
+  ['Axon','','','Laesie?','','Synaps'].forEach((lb, i) => {
+    if (lb) ctx.fillText(lb, nodes[i].x, nodes[i].y+17);
   });
 
   // signaal
-  let sigPos, sigBlocked = false;
-  if (cfg.breakAt > 0 && signalT >= cfg.breakAt) {
-    // blokkeert bij laesie
-    sigPos = pointOnPath(nodes, cfg.breakAt);
-    sigBlocked = true;
-    // trillende positie
-    sigPos.x += noise(t, 3);
-    sigPos.y += noise(t + 5, 3);
-    drawSignal(sigPos, '#ff6b6b', 'rgba(255,107,107,', 0.5 + 0.3 * Math.sin(t * 8), 5);
-  } else if (cfg.detour && signalT > 0.42) {
-    // omweg pad
-    const detourT = (signalT - 0.42) / 0.58;
-    sigPos = pointOnPath(detour, Math.min(detourT * 1.8, 1));
+  let sigPos;
+  if (cfg.breakAt>0 && signalT>=cfg.breakAt) {
+    sigPos = ptOnPath(nodes, cfg.breakAt);
+    sigPos.x += noise(t,3); sigPos.y += noise(t+5,3);
+    drawSignal(sigPos, '#FF6B6B', 'rgba(255,107,107,', .4+.3*Math.sin(t*9), 5);
+  } else if (cfg.detour && signalT>0.42) {
+    const dt = Math.min((signalT-0.42)/0.58*1.8, 1);
+    sigPos = ptOnPath(det, dt);
     drawSignal(sigPos, cfg.color, cfg.glow, cfg.signalOpacity, 6);
   } else {
-    sigPos = pointOnPath(nodes, signalT);
+    sigPos = ptOnPath(nodes, signalT);
     sigPos.x += noise(t, cfg.noiseAmp);
-    sigPos.y += noise(t + 3, cfg.noiseAmp);
+    sigPos.y += noise(t+3, cfg.noiseAmp);
     drawSignal(sigPos, cfg.color, cfg.glow, cfg.signalOpacity, 6);
   }
 
-  // labels op nodes
-  ctx.font = '9px Courier New';
-  ctx.fillStyle = 'rgba(107,140,174,0.7)';
-  ctx.textAlign = 'center';
-  const labels = ['Axon', '', '', stage === 'verstoord' ? 'Laesie' : '', '', 'Synaps'];
-  nodes.forEach((n, i) => {
-    if (labels[i]) ctx.fillText(labels[i], n.x, n.y + 18);
-  });
-
-  animId = requestAnimationFrame(draw);
+  requestAnimationFrame(drawFrame);
 }
 
-// ── Stage wisselen ──────────────────────────────────────
-function setStage(newStage) {
-  if (newStage === stage) return;
-  prevStage = stage;
-  stage = newStage;
-  signalT = 0;
-  transitioning = true;
-  transitionProgress = 0;
-
-  // UI bijwerken
-  const cfg = STAGES[stage];
-  const dot  = document.getElementById('stageDot');
-  const name = document.getElementById('stageName');
-  const desc = document.getElementById('stageDesc');
-  dot.style.background  = cfg.dotColor;
-  dot.style.boxShadow   = '0 0 8px ' + cfg.dotColor;
-  name.textContent      = cfg.name;
-  name.style.color      = cfg.color;
-  desc.textContent      = cfg.desc;
-
-  document.querySelectorAll('.anim-btn').forEach(b => b.classList.remove('active'));
-  document.querySelector('.anim-btn.' + newStage).classList.add('active');
+function setStage(s) {
+  stage = s; signalT = 0;
+  const cfg = STAGES[s];
+  const dot = document.getElementById('stageDot');
+  dot.style.background  = cfg.color;
+  dot.style.boxShadow   = '0 0 8px ' + cfg.color;
+  document.getElementById('stageName').textContent = cfg.name;
+  document.getElementById('stageName').style.color = cfg.color;
+  document.getElementById('stageDesc').textContent = cfg.desc;
+  document.querySelectorAll('.anim-btn-n').forEach(b => b.classList.remove('active-btn'));
+  const map = {gezond:'.gezond-btn', verstoord:'.verstoord-btn', herstel:'.herstel-btn'};
+  document.querySelector(map[s]).classList.add('active-btn');
 }
 
-// ── Klik op canvas wisselt stage ────────────────────────
-const stageOrder = ['gezond', 'verstoord', 'herstel'];
 canvas.addEventListener('click', () => {
-  const next = stageOrder[(stageOrder.indexOf(stage) + 1) % 3];
-  setStage(next);
+  const order = ['gezond','verstoord','herstel'];
+  setStage(order[(order.indexOf(stage)+1)%3]);
 });
 
-// ── Init UI ─────────────────────────────────────────────
 setStage('gezond');
-draw();
-// ═══════════════════════════════════════════════════════
+drawFrame();
+// ── Einde Canvas Neuron Animatie ────────────────────────
+
+// ── Consult View ──
+let consultItems = [];
+function exportConsult(name) {
+  if (!consultItems.includes(name)) {
+    consultItems.push(name);
+    updateConsultPanel();
+  }
+}
+function updateConsultPanel() {
+  const panel = document.getElementById('consult-panel');
+  const list = document.getElementById('consult-list');
+  panel.style.display = consultItems.length ? 'block' : 'none';
+  list.innerHTML = consultItems.map((n,i) => `${i+1}. ${n}`).join('<br>');
+}
+function clearConsult() {
+  consultItems = [];
+  updateConsultPanel();
+}
+function printConsult() {
+  const w = window.open('','_blank');
+  w.document.write(`<html><head><title>ForwardJuntos — Consult View</title>
+  <style>body{font-family:sans-serif;padding:40px;color:#1A1A2E;}
+  h1{color:#1ABFA0;font-size:20px;margin-bottom:8px;}
+  p{font-size:12px;color:#5A6A80;margin-bottom:20px;}
+  ul{font-size:14px;line-height:2;}
+  footer{margin-top:40px;font-size:11px;color:#8A9BB0;border-top:1px solid #eee;padding-top:12px;}
+  </style></head><body>
+  <h1>ForwardJuntos — Consult View</h1>
+  <p>Geselecteerde zenuwbanen voor gesprek met neuroloog · ${new Date().toLocaleDateString('nl-NL')}</p>
+  <ul>${consultItems.map(n=>`<li>${n}</li>`).join('')}</ul>
+  <footer>⚕ Geen medisch advies — educatief overzicht · forwardjuntos.nl</footer>
+  </body></html>`);
+  w.print();
+}
+
+// ── Scroll top ──
+window.addEventListener('scroll', () => {
+  document.getElementById('stbtn').classList.toggle('vis', window.scrollY > 400);
+});
 </script>
 </body>
 </html>
