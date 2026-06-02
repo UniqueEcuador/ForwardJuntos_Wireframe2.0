@@ -3,830 +3,604 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ForwardJuntos — Wireframe v2 · Flock</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>ForwardJuntos — Wireframe v2.2 · Flock</title>
 <style>
-  :root {
-    --ink:    #0A0912;
-    --purple: #2D1B69;
-    --violet: #5B3FA6;
-    --gold:   #C9963A;
-    --gold-l: #F0D9A8;
-    --muted:  #7A7488;
-    --white:  #FFFFFF;
-  }
-
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --deep: #0a0f1a; --mid: #0f1e35; --teal: #1abfa0;
+    --teal2: #0d8c74; --blue: #2e7dd4; --text: #e8f0f8;
+    --muted: #6b8cae; --light: #d6e8f7; --gold: #f0a500;
+    --red: #ff6b6b; --r: 12px;
+  }
   html { scroll-behavior: smooth; }
-
   body {
-    background: var(--ink);
-    color: var(--white);
-    font-family: 'DM Sans', sans-serif;
-    overflow-x: hidden;
+    background: var(--deep); color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh; overflow-x: hidden;
   }
-
-  /* ─── SCREEN 1: FLOCK OPENING ─── */
-  #screen-flock {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(26,191,160,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26,191,160,.04) 1px, transparent 1px);
+    background-size: 40px 40px; pointer-events: none; z-index: 0;
   }
+  .wrap { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; padding: 0 20px 80px; }
 
-  #flock-canvas {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-  }
+  /* ── HEADER ── */
+  header { text-align: center; padding: 40px 0 20px; border-bottom: 1px solid rgba(255,255,255,.06); }
+  .logo { font-size: 13px; font-weight: 700; color: var(--teal); letter-spacing: 1px; margin-bottom: 24px; }
+  h1 { font-size: clamp(26px, 5vw, 42px); font-weight: 800; line-height: 1.15; letter-spacing: -1px; margin-bottom: 10px; }
+  h1 em { color: var(--teal); font-style: normal; }
+  .tagline { font-size: 14px; color: var(--muted); margin-bottom: 20px; }
+  .principles { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; margin: 24px 0; }
+  .principle { text-align: center; flex: 1; min-width: 90px; max-width: 140px; }
+  .principle-num { width: 28px; height: 28px; border-radius: 50%; background: var(--teal); color: var(--deep); font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; }
+  .principle-name { font-size: 11px; font-weight: 700; color: var(--text); }
+  .principle-sub { font-size: 10px; color: var(--muted); }
 
-  .flock-overlay {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    padding: 0 32px;
-    pointer-events: none;
-  }
-
-  .flock-label {
-    font-size: 10px;
-    letter-spacing: 0.25em;
-    color: var(--gold);
-    text-transform: uppercase;
-    margin-bottom: 20px;
-    opacity: 0;
-    animation: fadeIn 1s ease 2s forwards;
-  }
-
-  .flock-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(26px, 7vw, 44px);
-    line-height: 1.15;
-    color: var(--white);
-    margin-bottom: 10px;
-    opacity: 0;
-    animation: fadeIn 1s ease 2.3s forwards;
-  }
-
-  .flock-title em {
-    font-style: italic;
-    color: var(--gold);
-  }
-
-  .flock-sub {
-    font-size: 14px;
-    color: rgba(255,255,255,0.45);
-    font-weight: 300;
-    line-height: 1.7;
-    max-width: 300px;
-    margin: 0 auto 36px;
-    opacity: 0;
-    animation: fadeIn 1s ease 2.6s forwards;
-  }
-
-  .flock-principles {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    margin-bottom: 40px;
-    opacity: 0;
-    animation: fadeIn 1s ease 3s forwards;
-    pointer-events: all;
-    flex-wrap: wrap;
-  }
-
-  .principle {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    cursor: pointer;
-  }
-
-  .principle-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border: 0.5px solid rgba(201,150,58,0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--gold);
-    background: rgba(201,150,58,0.06);
-    transition: all 0.3s;
-  }
-
-  .principle:hover .principle-icon {
-    background: rgba(201,150,58,0.2);
-    border-color: var(--gold);
-    transform: scale(1.1);
-  }
-
-  .principle-name {
-    font-size: 9px;
-    letter-spacing: 0.12em;
-    color: var(--muted);
-    text-transform: uppercase;
-    text-align: center;
-    max-width: 70px;
-    line-height: 1.3;
-  }
-
-  .scroll-down {
-    opacity: 0;
-    animation: fadeIn 1s ease 3.5s forwards;
-    pointer-events: all;
-  }
-
-  .scroll-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 14px 28px;
-    background: var(--gold);
-    color: var(--ink);
-    border: none;
-    border-radius: 40px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .scroll-btn:hover {
-    background: var(--gold-l);
-    transform: translateY(-2px);
-    box-shadow: 0 12px 32px rgba(201,150,58,0.3);
-  }
-
-  /* Lesion indicator in corner */
-  .lesion-indicator {
-    position: absolute;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 3;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    opacity: 0;
-    animation: fadeIn 1s ease 4s forwards;
-  }
-
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 10px;
-    color: rgba(255,255,255,0.35);
-    letter-spacing: 0.08em;
-  }
-
-  .legend-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-  }
-
-  /* ─── SCREEN 2: ROUTING ─── */
-  #screen-routing {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 60px 28px;
-    max-width: 480px;
-    margin: 0 auto;
-  }
-
-  .section-tag {
-    display: inline-block;
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    color: var(--gold);
-    text-transform: uppercase;
-    margin-bottom: 20px;
-    padding: 4px 12px;
-    border: 0.5px solid rgba(201,150,58,0.3);
-    border-radius: 20px;
-  }
-
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(22px, 6vw, 32px);
-    line-height: 1.2;
-    margin-bottom: 8px;
-    color: var(--white);
-  }
-
-  .section-title em {
-    font-style: italic;
-    color: var(--gold);
-  }
-
-  .section-sub {
-    font-size: 14px;
-    color: rgba(255,255,255,0.45);
-    line-height: 1.65;
-    margin-bottom: 32px;
-    font-weight: 300;
-  }
-
-  .options { display: flex; flex-direction: column; gap: 10px; }
-
-  .option-btn {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    padding: 16px 18px;
-    border: 0.5px solid rgba(255,255,255,0.1);
-    border-radius: 14px;
-    background: rgba(255,255,255,0.02);
-    cursor: pointer;
-    transition: all 0.25s ease;
-    text-align: left;
-    color: var(--white);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    line-height: 1.5;
-    backdrop-filter: blur(8px);
-  }
-
-  .option-btn:hover, .option-btn.active {
-    border-color: rgba(201,150,58,0.5);
-    background: rgba(201,150,58,0.07);
-    transform: translateX(5px);
-  }
-
-  .opt-num {
-    width: 26px; height: 26px;
-    border-radius: 50%;
-    border: 0.5px solid rgba(255,255,255,0.15);
+  /* ── PRIVACY BADGE (upgrade 2) ── */
+  .privacy-bar {
     display: flex; align-items: center; justify-content: center;
-    font-size: 11px; color: var(--muted);
-    flex-shrink: 0; margin-top: 1px;
-    transition: all 0.2s;
+    gap: 8px; flex-wrap: wrap;
+    background: rgba(26,191,160,.07);
+    border: 1px solid rgba(26,191,160,.2);
+    border-radius: 40px; padding: 8px 18px;
+    margin: 20px auto 0; max-width: 500px;
+    font-size: 12px; color: var(--muted);
+    transition: border-color .2s;
   }
+  .privacy-bar:hover { border-color: rgba(26,191,160,.45); }
+  .privacy-badge {
+    display: flex; align-items: center; gap: 5px;
+    background: rgba(26,191,160,.12);
+    border: 1px solid rgba(26,191,160,.3);
+    border-radius: 20px; padding: 3px 10px;
+    font-size: 11px; font-weight: 700; color: var(--teal); white-space: nowrap;
+  }
+  .privacy-badge .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--teal); animation: pulse-dot 2s ease-in-out infinite;
+  }
+  @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.7)} }
+  .privacy-items { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .privacy-item { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted); }
+  .privacy-item::before { content: '✓'; color: var(--teal); font-size: 10px; }
 
-  .option-btn:hover .opt-num,
-  .option-btn.active .opt-num {
-    border-color: var(--gold);
-    color: var(--gold);
-    background: rgba(201,150,58,0.12);
-  }
+  /* ── ZONES ── */
+  .zone { padding: 40px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
+  .zone-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; font-family: 'Courier New', monospace; }
 
-  /* ─── SCREEN 3: FOUNDER + CTA ─── */
-  #screen-founder {
-    min-height: 80vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 60px 28px;
-    max-width: 480px;
-    margin: 0 auto;
+  /* ══════════════════════════════════════════════════════
+     UPGRADE 4 — NEURON ANIMATIE (Canvas)
+     Vervangt de drie statische dots volledig.
+  ══════════════════════════════════════════════════════ */
+  .neuron-anim-wrap {
+    margin: 8px 0 24px;
+    background: rgba(255,255,255,.02);
+    border: 1px solid rgba(255,255,255,.06);
+    border-radius: var(--r);
+    overflow: hidden; position: relative;
   }
+  #neuronCanvas { display: block; width: 100%; height: 200px; cursor: pointer; }
 
-  .founder-card {
-    background: rgba(45,27,105,0.3);
-    border: 0.5px solid rgba(91,63,166,0.3);
-    border-radius: 20px;
-    padding: 28px;
-    margin-bottom: 28px;
-    position: relative;
-    overflow: hidden;
+  .neuron-stage-label {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 16px 12px;
   }
+  .stage-info {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .stage-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    transition: background .4s;
+  }
+  .stage-name {
+    font-size: 11px; font-weight: 700;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1px; transition: color .4s;
+  }
+  .stage-desc {
+    font-size: 10px; color: var(--muted); text-align: right;
+  }
+  .anim-controls {
+    display: flex; justify-content: center; gap: 8px;
+    padding: 0 16px 14px;
+  }
+  .anim-btn {
+    font-size: 10px; font-weight: 700; letter-spacing: 1px;
+    padding: 5px 14px; border-radius: 20px; border: none;
+    cursor: pointer; transition: all .2s;
+    font-family: 'Courier New', monospace; text-transform: uppercase;
+  }
+  .anim-btn.gezond  { background: rgba(26,191,160,.15); color: var(--teal); border: 1px solid rgba(26,191,160,.3); }
+  .anim-btn.verstoord { background: rgba(255,107,107,.15); color: var(--red); border: 1px solid rgba(255,107,107,.3); }
+  .anim-btn.herstel { background: rgba(46,125,212,.15); color: var(--blue); border: 1px solid rgba(46,125,212,.3); }
+  .anim-btn:hover { transform: translateY(-2px); filter: brightness(1.2); }
+  .anim-btn.active { filter: brightness(1.4); box-shadow: 0 0 12px currentColor; }
+  /* ══════════════════════════════════════════════════════ */
 
-  .founder-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--violet), var(--gold));
+  /* ── KREITER LINK (upgrade 3) ── */
+  .science-anchor {
+    background: linear-gradient(135deg, rgba(26,191,160,.08), rgba(46,125,212,.06));
+    border: 1px solid rgba(26,191,160,.2);
+    border-radius: var(--r); padding: 16px 20px; margin: 24px 0;
+    display: flex; align-items: flex-start; gap: 14px;
+    text-decoration: none; transition: all .25s;
+    position: relative; overflow: hidden;
   }
+  .science-anchor::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px; background: linear-gradient(180deg, var(--teal), var(--blue));
+  }
+  .science-anchor:hover { border-color: rgba(26,191,160,.45); transform: translateX(4px); }
+  .science-icon { font-size: 28px; flex-shrink: 0; margin-top: 2px; }
+  .science-text { flex: 1; }
+  .science-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--teal); margin-bottom: 4px; font-family: 'Courier New', monospace; }
+  .science-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; line-height: 1.3; }
+  .science-sub { font-size: 11px; color: var(--muted); line-height: 1.5; }
+  .science-badge { font-size: 9px; font-weight: 700; letter-spacing: 1px; background: rgba(240,165,0,.15); color: var(--gold); border: 1px solid rgba(240,165,0,.3); padding: 2px 8px; border-radius: 20px; margin-top: 6px; display: inline-block; }
+  .science-anchor[data-active="false"] { opacity: 0; pointer-events: none; height: 0; padding: 0; margin: 0; border: none; }
+  .science-anchor[data-active="true"]  { opacity: 1; animation: fade-in .5s ease; }
+  @keyframes fade-in { from{opacity:0;transform:translateY(8px)} to{opacity:1} }
 
-  .founder-quote {
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    font-size: 16px;
-    line-height: 1.75;
-    color: rgba(255,255,255,0.8);
-    margin-bottom: 16px;
-  }
+  /* ── ROUTING ── */
+  h2 { font-size: clamp(20px,4vw,32px); font-weight: 800; line-height: 1.2; letter-spacing: -.5px; margin-bottom: 10px; }
+  h2 em { color: var(--teal); font-style: normal; }
+  .routing-options { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; }
+  .routing-option { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); border-radius: var(--r); padding: 14px 16px; cursor: pointer; transition: all .2s; text-decoration: none; color: var(--text); font-size: 14px; }
+  .routing-option:hover { border-color: rgba(26,191,160,.4); background: rgba(26,191,160,.06); transform: translateX(4px); }
+  .routing-num { width: 24px; height: 24px; border-radius: 50%; background: var(--teal); color: var(--deep); font-weight: 800; font-size: 11px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
-  .founder-name {
-    font-size: 12px;
-    color: var(--gold);
-    font-weight: 500;
-    letter-spacing: 0.05em;
-  }
+  /* ── ZONE 3 ── */
+  .quote-block { background: rgba(255,255,255,.03); border-left: 3px solid var(--teal); border-radius: 0 var(--r) var(--r) 0; padding: 16px 20px; margin: 24px 0; font-size: 13px; color: var(--light); line-height: 1.7; font-style: italic; }
+  .features { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+  .feature { display: flex; gap: 14px; align-items: flex-start; padding: 14px; background: rgba(255,255,255,.03); border-radius: var(--r); border: 1px solid rgba(255,255,255,.06); }
+  .feature-num { width: 28px; height: 28px; border-radius: 50%; background: rgba(26,191,160,.15); border: 1px solid rgba(26,191,160,.3); color: var(--teal); font-weight: 800; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .feature-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+  .feature-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .cta-row { display: flex; flex-direction: column; align-items: center; gap: 8px; margin: 28px 0 8px; }
+  .cta-main { background: linear-gradient(135deg, var(--teal), var(--blue)); color: var(--deep); font-weight: 700; font-size: 14px; padding: 14px 28px; border-radius: 28px; text-decoration: none; transition: all .2s; box-shadow: 0 4px 20px rgba(26,191,160,.25); }
+  .cta-main:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(26,191,160,.4); }
+  .cta-sub { font-size: 11px; color: var(--muted); }
 
-  /* Flock principle cards */
-  .principle-cards {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 10px;
-    margin-bottom: 32px;
-  }
+  /* ── PRO CTA (upgrade 5) ── */
+  .pro-cta { margin: 40px 0 0; padding: 24px; background: var(--mid); border-radius: var(--r); border: 1px solid rgba(255,255,255,.06); position: relative; overflow: hidden; }
+  .pro-cta::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--teal), var(--blue)); }
+  .pro-cta-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; font-family: 'Courier New', monospace; }
+  .pro-cta-title { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 6px; line-height: 1.3; }
+  .pro-cta-sub { font-size: 12px; color: var(--muted); margin-bottom: 16px; line-height: 1.6; }
+  .pro-cta-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+  .pro-btn { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 700; padding: 10px 18px; border-radius: 24px; text-decoration: none; transition: all .2s; white-space: nowrap; }
+  .pro-btn-primary { background: linear-gradient(135deg, var(--teal), var(--blue)); color: var(--deep); box-shadow: 0 4px 16px rgba(26,191,160,.25); }
+  .pro-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(26,191,160,.4); }
+  .pro-btn-secondary { background: transparent; color: var(--muted); border: 1px solid rgba(255,255,255,.1); }
+  .pro-btn-secondary:hover { border-color: rgba(26,191,160,.3); color: var(--teal); }
+  .pro-who { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+  .pro-who-tag { font-size: 10px; color: var(--teal); background: rgba(26,191,160,.1); border: 1px solid rgba(26,191,160,.2); padding: 3px 9px; border-radius: 20px; }
 
-  .p-card {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    padding: 14px 16px;
-    border-radius: 12px;
-    border: 0.5px solid rgba(255,255,255,0.07);
-    background: rgba(255,255,255,0.02);
-  }
-
-  .p-num {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px;
-    font-style: italic;
-    color: rgba(201,150,58,0.3);
-    line-height: 1;
-    flex-shrink: 0;
-    width: 24px;
-  }
-
-  .p-title {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--gold);
-    margin-bottom: 3px;
-    letter-spacing: 0.05em;
-  }
-
-  .p-desc {
-    font-size: 12px;
-    color: rgba(255,255,255,0.45);
-    line-height: 1.55;
-  }
-
-  .cta-btn {
-    width: 100%;
-    padding: 18px;
-    background: var(--gold);
-    color: var(--ink);
-    border: none;
-    border-radius: 14px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .cta-btn:hover {
-    background: var(--gold-l);
-    transform: translateY(-2px);
-    box-shadow: 0 12px 32px rgba(201,150,58,0.25);
-  }
-
-  .cta-micro {
-    text-align: center;
-    margin-top: 12px;
-    font-size: 11px;
-    color: var(--muted);
-  }
-
-  /* Wireframe annotations */
-  .wf-note {
-    display: inline-block;
-    background: rgba(91,63,166,0.2);
-    border: 0.5px dashed rgba(91,63,166,0.6);
-    border-radius: 4px;
-    padding: 2px 8px;
-    font-size: 10px;
-    color: rgba(180,160,255,0.7);
-    margin-bottom: 8px;
-    letter-spacing: 0.05em;
-  }
-
-  /* Footer */
-  footer {
-    text-align: center;
-    padding: 32px 24px;
-    font-size: 11px;
-    color: rgba(255,255,255,0.15);
-    border-top: 0.5px solid rgba(255,255,255,0.05);
-    letter-spacing: 0.1em;
-  }
-
-  /* Divider */
-  .screen-divider {
-    width: 100%;
-    height: 0.5px;
-    background: linear-gradient(90deg, transparent, rgba(201,150,58,0.3), transparent);
-    margin: 0;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+  footer { text-align: center; padding: 24px 0; border-top: 1px solid rgba(255,255,255,.06); margin-top: 40px; font-size: 11px; color: rgba(107,140,174,.5); }
 </style>
 </head>
 <body>
+<div class="wrap">
 
-<!-- ═══════════════════════════════════════════
-     SCREEN 1 — FLOCK OPENING
-═══════════════════════════════════════════ -->
-<section id="screen-flock">
-  <canvas id="flock-canvas"></canvas>
-
-  <div class="flock-overlay">
-    <p class="flock-label">ForwardJuntos · Van laesie naar leven</p>
-
-    <h1 class="flock-title">
-      Samen bewegen.<br>
-      <em>Begrijpen wat er gebeurt.</em>
-    </h1>
-
-    <p class="flock-sub">
-      Drie principes uit de natuur. Eén platform voor mensen met MS.
-    </p>
-
-    <div class="flock-principles">
-      <div class="principle" onclick="highlightPrinciple('avoid')">
-        <div class="principle-icon">1</div>
-        <div class="principle-name">Ruimte<br>respecteren</div>
+  <!-- HEADER -->
+  <header>
+    <div class="logo">ForwardJuntos · Van laesie naar leven</div>
+    <div class="privacy-bar">
+      <div class="privacy-badge"><span class="dot"></span>GDPR-by-design</div>
+      <div class="privacy-items">
+        <span class="privacy-item">Geen tracking</span>
+        <span class="privacy-item">Local-first</span>
+        <span class="privacy-item">Jouw data blijft van jou</span>
       </div>
-      <div class="principle" onclick="highlightPrinciple('match')">
-        <div class="principle-icon">2</div>
-        <div class="principle-name">Tempo<br>afstemmen</div>
+    </div>
+    <h1 style="margin-top:24px">Samen bewegen. <em>Begrijpen wat er gebeurt.</em></h1>
+    <p class="tagline">Drie principes uit de natuur. Eén platform voor mensen met MS.</p>
+    <div class="principles">
+      <div class="principle"><div class="principle-num">1</div><div class="principle-name">Ruimte</div><div class="principle-sub">respecteren</div></div>
+      <div class="principle"><div class="principle-num">2</div><div class="principle-name">Tempo</div><div class="principle-sub">afstemmen</div></div>
+      <div class="principle"><div class="principle-num">3</div><div class="principle-name">Samen</div><div class="principle-sub">centreren</div></div>
+    </div>
+    <p style="font-size:12px;color:var(--muted)">Ik ben hier aangekomen ↓</p>
+  </header>
+
+  <!-- ZONE 1: NEURON ANIMATIE -->
+  <div class="zone">
+    <div class="zone-label">Zone 1 — Neuron Visualisatie</div>
+
+    <!-- UPGRADE 4: Canvas animatie -->
+    <div class="neuron-anim-wrap">
+      <canvas id="neuronCanvas"></canvas>
+      <div class="neuron-stage-label">
+        <div class="stage-info">
+          <div class="stage-dot" id="stageDot"></div>
+          <div class="stage-name" id="stageName">GEZOND SIGNAAL</div>
+        </div>
+        <div class="stage-desc" id="stageDesc">Klik op de animatie of gebruik de knoppen</div>
       </div>
-      <div class="principle" onclick="highlightPrinciple('center')">
-        <div class="principle-icon">3</div>
-        <div class="principle-name">Samen<br>centreren</div>
+      <div class="anim-controls">
+        <button class="anim-btn gezond active" onclick="setStage('gezond')">Gezond</button>
+        <button class="anim-btn verstoord" onclick="setStage('verstoord')">Verstoord</button>
+        <button class="anim-btn herstel" onclick="setStage('herstel')">Herstel</button>
       </div>
     </div>
 
-    <div class="scroll-down">
-      <button class="scroll-btn" onclick="document.getElementById('screen-routing').scrollIntoView({behavior:'smooth'})">
-        Ik ben hier aangekomen ↓
-      </button>
+    <!-- UPGRADE 3: Kreiter link — activeer na 15/6 -->
+    <a class="science-anchor"
+       data-active="false"
+       href="https://cris.maastrichtuniversity.nl"
+       target="_blank" rel="noopener">
+      <div class="science-icon">🔬</div>
+      <div class="science-text">
+        <div class="science-label">Wetenschappelijke basis · Maastricht University</div>
+        <div class="science-title">Ruggenmerglaesies bij MS: beeldvorming en behandelmonitoring</div>
+        <div class="science-sub">Proefschrift Daniël Kreiter · Promotor: Prof. dr. R.M.M. Hupperts · Zuyderland MC &amp; UM<br>De visualisaties in ForwardJuntos zijn direct gebaseerd op dit onderzoek.</div>
+        <span class="science-badge">Verdedigd 15 juni 2026 · Universiteit Maastricht</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- ZONE 2: ROUTING -->
+  <div class="zone">
+    <div class="zone-label">Zone 2 — Routing</div>
+    <h2>Je hebt iets te horen gekregen dat <em>alles verandert.</em></h2>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:4px">Je bent hier op de juiste plek. Geen jargon. Geen oordeel.<br>Alleen begrip — van iemand die het zelf leeft.</p>
+    <div class="routing-options">
+      <a class="routing-option" href="#"><div class="routing-num">1</div>Ik heb net de diagnose MS gekregen</a>
+      <a class="routing-option" href="#"><div class="routing-num">2</div>Ik wil begrijpen wat MS doet in mijn lichaam</a>
+      <a class="routing-option" href="#"><div class="routing-num">3</div>Iemand die ik ken heeft MS — ik zoek begrip</a>
     </div>
   </div>
 
-  <div class="lesion-indicator">
-    <div class="legend-item">
-      <div class="legend-dot" style="background:rgba(201,150,58,0.8)"></div>
-      neuron · gezond signaal
+  <!-- ZONE 3: VERBINDING & ACTIE -->
+  <div class="zone">
+    <div class="zone-label">Zone 3 — Verbinding &amp; actie</div>
+    <div class="quote-block">"Ik kreeg dezelfde diagnose. Dit is wat ik wou dat iemand me had laten zien — voordat de onzekerheid groter werd dan het begrip."<br><br>— Dominique · oprichter ForwardJuntos · leeft met MS</div>
+    <div class="features">
+      <div class="feature"><div class="feature-num">1</div><div><div class="feature-title">Collision Avoidance — Ruimte</div><div class="feature-desc">De app dringt zich nooit op. Jij bepaalt het tempo. Geen volgende stap die je niet zelf zet.</div></div></div>
+      <div class="feature"><div class="feature-num">2</div><div><div class="feature-title">Velocity Matching — Tempo</div><div class="feature-desc">Het systeem past zich aan jouw energieniveau aan. Net gediagnosticeerd of al jaren verder — de app beweegt met jou mee.</div></div></div>
+      <div class="feature"><div class="feature-num">3</div><div><div class="feature-title">Flock Centering — Verbinding</div><div class="feature-desc">Je bent niet alleen. De community vormt zich organisch — niet omdat het moet, maar omdat gedeelde ervaring trekt.</div></div></div>
     </div>
-    <div class="legend-item">
-      <div class="legend-dot" style="background:rgba(220,80,80,0.7)"></div>
-      verstoord · laesie
-    </div>
-    <div class="legend-item">
-      <div class="legend-dot" style="background:rgba(91,63,166,0.8)"></div>
-      herstel · nieuwe route
-    </div>
-  </div>
-</section>
-
-<div class="screen-divider"></div>
-
-<!-- ═══════════════════════════════════════════
-     SCREEN 2 — ROUTING VRAAG
-═══════════════════════════════════════════ -->
-<section id="screen-routing">
-  <span class="wf-note">WIREFRAME ZONE 2 — Routing</span>
-  <div class="section-tag">Waar ben je nu?</div>
-
-  <h2 class="section-title">
-    Je hebt iets te horen gekregen<br>dat <em>alles verandert.</em>
-  </h2>
-
-  <p class="section-sub">
-    Je bent hier op de juiste plek. Geen jargon. Geen oordeel.<br>
-    Alleen begrip — van iemand die het zelf leeft.
-  </p>
-
-  <div class="options">
-    <button class="option-btn active" onclick="selectOpt(this)">
-      <span class="opt-num">1</span>
-      Ik heb net de diagnose MS gekregen
-    </button>
-    <button class="option-btn" onclick="selectOpt(this)">
-      <span class="opt-num">2</span>
-      Ik wil begrijpen wat MS doet in mijn lichaam
-    </button>
-    <button class="option-btn" onclick="selectOpt(this)">
-      <span class="opt-num">3</span>
-      Iemand die ik ken heeft MS — ik zoek begrip
-    </button>
-  </div>
-</section>
-
-<div class="screen-divider"></div>
-
-<!-- ═══════════════════════════════════════════
-     SCREEN 3 — FOUNDER + PRINCIPES + CTA
-═══════════════════════════════════════════ -->
-<section id="screen-founder">
-  <span class="wf-note">WIREFRAME ZONE 3 — Verbinding & actie</span>
-
-  <div class="founder-card">
-    <p class="founder-quote">
-      "Ik kreeg dezelfde diagnose. Dit is wat ik wou dat iemand me had laten zien — voordat de onzekerheid groter werd dan het begrip."
-    </p>
-    <p class="founder-name">— Dominique · oprichter ForwardJuntos · leeft met MS</p>
-  </div>
-
-  <div class="principle-cards">
-    <div class="p-card">
-      <div class="p-num">1</div>
-      <div>
-        <div class="p-title">Collision Avoidance — Ruimte</div>
-        <div class="p-desc">De app dringt zich nooit op. Jij bepaalt het tempo. Geen volgende stap die je niet zelf zet.</div>
-      </div>
-    </div>
-    <div class="p-card">
-      <div class="p-num">2</div>
-      <div>
-        <div class="p-title">Velocity Matching — Tempo</div>
-        <div class="p-desc">Het systeem past zich aan jouw energieniveau aan. Net gediagnosticeerd of al jaren verder — de app beweegt met jou mee.</div>
-      </div>
-    </div>
-    <div class="p-card">
-      <div class="p-num">3</div>
-      <div>
-        <div class="p-title">Flock Centering — Verbinding</div>
-        <div class="p-desc">Je bent niet alleen. De community vormt zich organisch — niet omdat het moet, maar omdat gedeelde ervaring trekt.</div>
-      </div>
+    <div class="cta-row">
+      <a class="cta-main" href="#">Bekijk de kaart van je zenuwstelsel →</a>
+      <span class="cta-sub">Geen registratie · Geen kosten · Alleen begrip</span>
     </div>
   </div>
 
-  <button class="cta-btn">Bekijk de kaart van je zenuwstelsel →</button>
-  <p class="cta-micro">Geen registratie · Geen kosten · Alleen begrip</p>
-</section>
+  <!-- UPGRADE 5: PRO CTA -->
+  <div class="pro-cta">
+    <div class="pro-cta-label">Voor professionals &amp; partners</div>
+    <div class="pro-who">
+      <span class="pro-who-tag">Brightlands Campus</span>
+      <span class="pro-who-tag">Holoxica</span>
+      <span class="pro-who-tag">Neurologen</span>
+      <span class="pro-who-tag">Onderzoekers</span>
+    </div>
+    <div class="pro-cta-title">Bekijk het volledige samenwerkingsvoorstel</div>
+    <div class="pro-cta-sub">
+      ForwardJuntos × Brightlands Campus · Versie 5.0 · Juni 2026<br>
+      18-maanden roadmap · Hardware ecosystem · Wetenschappelijke verankering
+    </div>
+    <div class="pro-cta-buttons">
+      <a class="pro-btn pro-btn-primary"
+         href="https://uniqueecuador.github.io/ForwardJuntos_Brightlands-V4/"
+         target="_blank" rel="noopener">
+        Voorstel v5.0 bekijken →
+      </a>
+      <a class="pro-btn pro-btn-secondary" href="mailto:info@forwardjuntos.nl">
+        Direct contact
+      </a>
+    </div>
+  </div>
 
-<footer>
-  ForwardJuntos · Wireframe v2 · Flock Formation · Mei 2026
-</footer>
+  <footer>
+    ForwardJuntos · Wireframe v2.2 · Flock Formation · Juni 2026
+  </footer>
+</div>
 
 <script>
-// ═══════════════════════════════════════════
-// BOIDS / FLOCK SIMULATION
-// Three rules: Separation · Alignment · Cohesion
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
+// UPGRADE 4 — NEURON CANVAS ANIMATIE
+// Drie staten: gezond / verstoord / herstel
+// ═══════════════════════════════════════════════════════
 
-const canvas = document.getElementById('flock-canvas');
+const canvas = document.getElementById('neuronCanvas');
 const ctx = canvas.getContext('2d');
 
-let W, H, boids = [];
-let activeRule = null; // for interactive highlighting
-
-const COLORS = {
-  healthy: { r: 201, g: 150, b: 58  },  // gold
-  lesion:  { r: 220, g: 80,  b: 80  },  // red
-  healing: { r: 91,  g: 63,  b: 166 },  // violet
+// ── Staat configuratie ──────────────────────────────────
+const STAGES = {
+  gezond: {
+    color: '#1abfa0', glow: 'rgba(26,191,160,',
+    dotColor: '#1abfa0', name: 'GEZOND SIGNAAL',
+    desc: 'Myeline intact · signaal reist snel en helder',
+    signalSpeed: 3.2, signalOpacity: 1,
+    noiseAmp: 0, breakAt: -1,
+    pathColor: 'rgba(26,191,160,0.3)',
+  },
+  verstoord: {
+    color: '#ff6b6b', glow: 'rgba(255,107,107,',
+    dotColor: '#ff6b6b', name: 'VERSTOORD · LAESIE',
+    desc: 'Demyelinisatie · signaal blokkeert bij de laesie',
+    signalSpeed: 1.8, signalOpacity: 0.6,
+    noiseAmp: 4, breakAt: 0.52,
+    pathColor: 'rgba(255,107,107,0.2)',
+  },
+  herstel: {
+    color: '#2e7dd4', glow: 'rgba(46,125,212,',
+    dotColor: '#2e7dd4', name: 'HERSTEL · NIEUWE ROUTE',
+    desc: 'Neuroplasticiteit · alternatief pad gevormd',
+    signalSpeed: 2.4, signalOpacity: 0.85,
+    noiseAmp: 0, breakAt: -1,
+    pathColor: 'rgba(46,125,212,0.25)',
+    detour: true,
+  },
 };
 
+let stage = 'gezond';
+let t = 0;
+let signalT = 0;
+let transitioning = false;
+let transitionProgress = 0;
+let prevStage = 'gezond';
+let animId;
+
+// ── Resize canvas ───────────────────────────────────────
 function resize() {
-  W = canvas.width  = canvas.offsetWidth;
-  H = canvas.height = canvas.offsetHeight;
+  const rect = canvas.parentElement.getBoundingClientRect();
+  canvas.width  = rect.width;
+  canvas.height = 200;
+}
+resize();
+window.addEventListener('resize', () => { resize(); });
+
+// ── Neuron nodes ────────────────────────────────────────
+function getNodes() {
+  const W = canvas.width, H = canvas.height;
+  const cx = W / 2, cy = H / 2;
+  return [
+    { x: W * 0.08, y: cy },         // 0: start
+    { x: W * 0.25, y: cy - 20 },    // 1
+    { x: W * 0.42, y: cy + 10 },    // 2
+    { x: W * 0.58, y: cy - 15 },    // 3 — laesie punt
+    { x: W * 0.74, y: cy + 5 },     // 4
+    { x: W * 0.92, y: cy },         // 5: eind
+  ];
 }
 
-class Boid {
-  constructor(type = 'healthy') {
-    this.x   = Math.random() * W;
-    this.y   = Math.random() * H;
-    this.vx  = (Math.random() - 0.5) * 2;
-    this.vy  = (Math.random() - 0.5) * 2;
-    this.type = type;
-    this.size = type === 'lesion' ? 2.5 : type === 'healing' ? 2 : 1.8;
-    this.trail = [];
+function getDetourNodes() {
+  const W = canvas.width, H = canvas.height;
+  const cy = H / 2;
+  return [
+    { x: W * 0.42, y: cy + 10 },    // vanaf node 2
+    { x: W * 0.50, y: cy + 55 },    // omweg laag
+    { x: W * 0.58, y: cy + 60 },
+    { x: W * 0.66, y: cy + 40 },
+    { x: W * 0.74, y: cy + 5 },     // aansluit node 4
+  ];
+}
+
+// ── Bezier punt op pad ──────────────────────────────────
+function pointOnPath(nodes, t) {
+  const segs = nodes.length - 1;
+  const seg = Math.min(Math.floor(t * segs), segs - 1);
+  const lt  = (t * segs) - seg;
+  const a = nodes[seg], b = nodes[seg + 1];
+  // cubic bezier met control points
+  const cpx1 = a.x + (b.x - a.x) * 0.4;
+  const cpy1 = a.y - 18;
+  const cpx2 = a.x + (b.x - a.x) * 0.6;
+  const cpy2 = b.y + 18;
+  const u = 1 - lt;
+  return {
+    x: u*u*u*a.x + 3*u*u*lt*cpx1 + 3*u*lt*lt*cpx2 + lt*lt*lt*b.x,
+    y: u*u*u*a.y + 3*u*u*lt*cpy1 + 3*u*lt*lt*cpy2 + lt*lt*lt*b.y,
+  };
+}
+
+// ── Teken pad ───────────────────────────────────────────
+function drawPath(nodes, color, lineWidth, dashed) {
+  ctx.beginPath();
+  ctx.moveTo(nodes[0].x, nodes[0].y);
+  for (let i = 1; i < nodes.length; i++) {
+    const a = nodes[i-1], b = nodes[i];
+    const cpx1 = a.x + (b.x - a.x) * 0.4, cpy1 = a.y - 18;
+    const cpx2 = a.x + (b.x - a.x) * 0.6, cpy2 = b.y + 18;
+    ctx.bezierCurveTo(cpx1, cpy1, cpx2, cpy2, b.x, b.y);
   }
+  ctx.strokeStyle = color;
+  ctx.lineWidth = lineWidth;
+  if (dashed) ctx.setLineDash([5, 8]);
+  else ctx.setLineDash([]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+}
 
-  get color() { return COLORS[this.type]; }
+// ── Teken node ──────────────────────────────────────────
+function drawNode(x, y, color, glow, size, glowAmt) {
+  ctx.save();
+  ctx.shadowColor = glow + '0.7)';
+  ctx.shadowBlur  = glowAmt;
+  ctx.beginPath();
+  ctx.arc(x, y, size, 0, Math.PI * 2);
+  ctx.fillStyle = color;
+  ctx.fill();
+  ctx.restore();
+}
 
-  update(boids) {
-    const PERCEPTION   = activeRule === 'avoid'  ? 80  : 60;
-    const SEP_RADIUS   = activeRule === 'avoid'  ? 40  : 25;
-    const MAX_SPEED    = this.type === 'lesion'  ? 1.2 : 2.2;
-    const MAX_FORCE    = 0.08;
-
-    let sep = {x:0,y:0}, ali = {x:0,y:0}, coh = {x:0,y:0};
-    let sepCount = 0, aliCount = 0, cohCount = 0;
-
-    for (const other of boids) {
-      if (other === this) continue;
-      const dx = other.x - this.x;
-      const dy = other.y - this.y;
-      const d  = Math.sqrt(dx*dx + dy*dy);
-
-      // 1. SEPARATION — collision avoidance
-      if (d < SEP_RADIUS && d > 0) {
-        sep.x -= dx / d;
-        sep.y -= dy / d;
-        sepCount++;
-      }
-
-      // 2. ALIGNMENT — velocity matching
-      if (d < PERCEPTION) {
-        ali.x += other.vx;
-        ali.y += other.vy;
-        aliCount++;
-      }
-
-      // 3. COHESION — flock centering
-      if (d < PERCEPTION * 1.5) {
-        coh.x += other.x;
-        coh.y += other.y;
-        cohCount++;
-      }
-    }
-
-    // Apply separation
-    if (sepCount > 0) {
-      sep.x /= sepCount;
-      sep.y /= sepCount;
-      const sm = Math.sqrt(sep.x**2 + sep.y**2);
-      if (sm > 0) {
-        sep.x = (sep.x/sm) * MAX_SPEED - this.vx;
-        sep.y = (sep.y/sm) * MAX_SPEED - this.vy;
-        const fl = Math.sqrt(sep.x**2 + sep.y**2);
-        if (fl > MAX_FORCE) { sep.x = sep.x/fl*MAX_FORCE; sep.y = sep.y/fl*MAX_FORCE; }
-      }
-    }
-
-    // Apply alignment
-    if (aliCount > 0) {
-      ali.x /= aliCount;
-      ali.y /= aliCount;
-      const am = Math.sqrt(ali.x**2 + ali.y**2);
-      if (am > 0) {
-        ali.x = (ali.x/am) * MAX_SPEED - this.vx;
-        ali.y = (ali.y/am) * MAX_SPEED - this.vy;
-        const fl = Math.sqrt(ali.x**2 + ali.y**2);
-        if (fl > MAX_FORCE) { ali.x = ali.x/fl*MAX_FORCE; ali.y = ali.y/fl*MAX_FORCE; }
-      }
-    }
-
-    // Apply cohesion
-    if (cohCount > 0) {
-      coh.x = coh.x/cohCount - this.x;
-      coh.y = coh.y/cohCount - this.y;
-      const cm = Math.sqrt(coh.x**2 + coh.y**2);
-      if (cm > 0) {
-        coh.x = (coh.x/cm) * MAX_SPEED - this.vx;
-        coh.y = (coh.y/cm) * MAX_SPEED - this.vy;
-        const fl = Math.sqrt(coh.x**2 + coh.y**2);
-        if (fl > MAX_FORCE) { coh.x = coh.x/fl*MAX_FORCE; coh.y = coh.y/fl*MAX_FORCE; }
-      }
-    }
-
-    // Weights — lesion boids resist alignment
-    const sepW = this.type === 'lesion' ? 2.0 : 1.5;
-    const aliW = this.type === 'lesion' ? 0.3 : 1.2;
-    const cohW = this.type === 'healing'? 1.8 : 1.0;
-
-    this.vx += sep.x * sepW + ali.x * aliW + coh.x * cohW;
-    this.vy += sep.y * sepW + ali.y * aliW + coh.y * cohW;
-
-    // Limit speed
-    const speed = Math.sqrt(this.vx**2 + this.vy**2);
-    if (speed > MAX_SPEED) {
-      this.vx = this.vx/speed * MAX_SPEED;
-      this.vy = this.vy/speed * MAX_SPEED;
-    }
-
-    // Minimum speed
-    if (speed < 0.3) {
-      this.vx += (Math.random()-0.5) * 0.2;
-      this.vy += (Math.random()-0.5) * 0.2;
-    }
-
-    // Store trail
-    this.trail.push({x: this.x, y: this.y});
-    if (this.trail.length > 8) this.trail.shift();
-
-    this.x += this.vx;
-    this.y += this.vy;
-
-    // Wrap edges
-    if (this.x < 0)  this.x = W;
-    if (this.x > W)  this.x = 0;
-    if (this.y < 0)  this.y = H;
-    if (this.y > H)  this.y = 0;
-  }
-
-  draw() {
-    const c = this.color;
-
-    // Trail
-    if (this.trail.length > 1) {
+// ── Teken myeline segmenten ─────────────────────────────
+function drawMyelin(nodes, color, broken, breakAt) {
+  for (let i = 0; i < nodes.length - 1; i++) {
+    const segStart = i / (nodes.length - 1);
+    const segEnd   = (i + 1) / (nodes.length - 1);
+    if (broken && breakAt >= segStart && breakAt <= segEnd) {
+      // gebroken segment — korter
+      const a = nodes[i], b = nodes[i + 1];
+      ctx.save();
+      ctx.globalAlpha = 0.3;
+      drawPath([a, b], '#ff6b6b', 12, false);
+      // laesie markering
+      const mid = pointOnPath(nodes, breakAt);
+      ctx.shadowColor = 'rgba(255,107,107,0.8)';
+      ctx.shadowBlur  = 20;
       ctx.beginPath();
-      ctx.moveTo(this.trail[0].x, this.trail[0].y);
-      for (let i = 1; i < this.trail.length; i++) {
-        ctx.lineTo(this.trail[i].x, this.trail[i].y);
-      }
-      ctx.strokeStyle = `rgba(${c.r},${c.g},${c.b},0.15)`;
-      ctx.lineWidth = 0.5;
-      ctx.stroke();
-    }
-
-    // Boid body — oriented arrow
-    const angle = Math.atan2(this.vy, this.vx);
-    ctx.save();
-    ctx.translate(this.x, this.y);
-    ctx.rotate(angle);
-
-    const s = this.size;
-    ctx.beginPath();
-    ctx.moveTo(s * 3, 0);
-    ctx.lineTo(-s * 2, s * 1.5);
-    ctx.lineTo(-s * 1, 0);
-    ctx.lineTo(-s * 2, -s * 1.5);
-    ctx.closePath();
-
-    ctx.fillStyle = `rgba(${c.r},${c.g},${c.b},0.85)`;
-    ctx.fill();
-
-    // Glow for lesion
-    if (this.type === 'lesion') {
-      ctx.shadowColor = `rgba(${c.r},${c.g},${c.b},0.6)`;
-      ctx.shadowBlur = 8;
+      ctx.arc(mid.x, mid.y, 8, 0, Math.PI * 2);
+      ctx.fillStyle = '#ff4444';
       ctx.fill();
-      ctx.shadowBlur = 0;
+      // X markering
+      ctx.globalAlpha = 1;
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(mid.x - 5, mid.y - 5); ctx.lineTo(mid.x + 5, mid.y + 5);
+      ctx.moveTo(mid.x + 5, mid.y - 5); ctx.lineTo(mid.x - 5, mid.y + 5);
+      ctx.stroke();
+      ctx.restore();
+    } else {
+      ctx.save();
+      drawPath([nodes[i], nodes[i+1]], color + '0.18)', 12, false);
+      ctx.restore();
     }
-
-    ctx.restore();
   }
 }
 
-function initBoids() {
-  boids = [];
-  const n = Math.min(Math.floor(W * H / 6000), 90);
-  for (let i = 0; i < n; i++) {
-    const r = Math.random();
-    const type = r < 0.72 ? 'healthy' : r < 0.88 ? 'healing' : 'lesion';
-    boids.push(new Boid(type));
-  }
+// ── Teken signaal ───────────────────────────────────────
+function drawSignal(pos, color, glow, opacity, size) {
+  ctx.save();
+  ctx.globalAlpha = opacity;
+  ctx.shadowColor = glow + '1)';
+  ctx.shadowBlur  = 24;
+  ctx.beginPath();
+  ctx.arc(pos.x, pos.y, size, 0, Math.PI * 2);
+  ctx.fillStyle = color;
+  ctx.fill();
+  // halo
+  ctx.globalAlpha = opacity * 0.25;
+  ctx.beginPath();
+  ctx.arc(pos.x, pos.y, size + 6, 0, Math.PI * 2);
+  ctx.fillStyle = color;
+  ctx.fill();
+  ctx.restore();
 }
 
-function animate() {
+// ── Noise ───────────────────────────────────────────────
+function noise(t, amp) {
+  return amp * (Math.sin(t * 7.3) * 0.5 + Math.sin(t * 13.1) * 0.3 + Math.sin(t * 3.7) * 0.2);
+}
+
+// ── Hoofd render loop ───────────────────────────────────
+function draw() {
+  const W = canvas.width, H = canvas.height;
   ctx.clearRect(0, 0, W, H);
 
-  // Subtle connection lines between nearby healthy boids
-  for (let i = 0; i < boids.length; i++) {
-    for (let j = i+1; j < boids.length; j++) {
-      const dx = boids[i].x - boids[j].x;
-      const dy = boids[i].y - boids[j].y;
-      const d = Math.sqrt(dx*dx + dy*dy);
-      if (d < 45 && boids[i].type !== 'lesion' && boids[j].type !== 'lesion') {
-        const alpha = (1 - d/45) * 0.08;
-        ctx.beginPath();
-        ctx.moveTo(boids[i].x, boids[i].y);
-        ctx.lineTo(boids[j].x, boids[j].y);
-        ctx.strokeStyle = `rgba(201,150,58,${alpha})`;
-        ctx.lineWidth = 0.5;
-        ctx.stroke();
-      }
-    }
+  const cfg  = STAGES[stage];
+  const prev = STAGES[prevStage];
+  const nodes = getNodes();
+  const detour = getDetourNodes();
+
+  t += 0.012;
+  signalT += cfg.signalSpeed * 0.004;
+  if (signalT > 1) signalT = 0;
+
+  // transitie
+  if (transitioning) {
+    transitionProgress += 0.04;
+    if (transitionProgress >= 1) { transitioning = false; transitionProgress = 1; }
   }
 
-  for (const b of boids) {
-    b.update(boids);
-    b.draw();
+  // myeline laag
+  drawMyelin(nodes, cfg.glow, cfg.breakAt > 0, cfg.breakAt);
+
+  // detour pad (herstel)
+  if (stage === 'herstel') {
+    ctx.globalAlpha = 0.6;
+    drawPath(detour, 'rgba(46,125,212,0.5)', 2, true);
+    ctx.globalAlpha = 1;
   }
 
-  requestAnimationFrame(animate);
-}
+  // hoofd pad
+  drawPath(nodes, cfg.pathColor, 2.5, false);
 
-// Interactive principle highlight
-window.highlightPrinciple = function(rule) {
-  activeRule = activeRule === rule ? null : rule;
-  document.querySelectorAll('.principle-icon').forEach((el, i) => {
-    const rules = ['avoid','match','center'];
-    el.style.background = activeRule === rules[i]
-      ? 'rgba(201,150,58,0.3)'
-      : 'rgba(201,150,58,0.06)';
-    el.style.borderColor = activeRule === rules[i]
-      ? 'var(--gold)'
-      : 'rgba(201,150,58,0.3)';
+  // nodes
+  nodes.forEach((n, i) => {
+    const isEnd   = i === 0 || i === nodes.length - 1;
+    const isLesie = cfg.breakAt > 0 && Math.abs(i / (nodes.length-1) - cfg.breakAt) < 0.2;
+    const color   = isLesie ? '#ff4444' : cfg.color;
+    const glow    = isLesie ? 'rgba(255,68,68,' : cfg.glow;
+    const pulse   = isEnd ? 1 + 0.12 * Math.sin(t * 2 + i) : 1;
+    drawNode(n.x, n.y, color, glow, isEnd ? 7 * pulse : 4.5, isEnd ? 16 : 8);
   });
-};
 
-function selectOpt(btn) {
-  document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+  // signaal
+  let sigPos, sigBlocked = false;
+  if (cfg.breakAt > 0 && signalT >= cfg.breakAt) {
+    // blokkeert bij laesie
+    sigPos = pointOnPath(nodes, cfg.breakAt);
+    sigBlocked = true;
+    // trillende positie
+    sigPos.x += noise(t, 3);
+    sigPos.y += noise(t + 5, 3);
+    drawSignal(sigPos, '#ff6b6b', 'rgba(255,107,107,', 0.5 + 0.3 * Math.sin(t * 8), 5);
+  } else if (cfg.detour && signalT > 0.42) {
+    // omweg pad
+    const detourT = (signalT - 0.42) / 0.58;
+    sigPos = pointOnPath(detour, Math.min(detourT * 1.8, 1));
+    drawSignal(sigPos, cfg.color, cfg.glow, cfg.signalOpacity, 6);
+  } else {
+    sigPos = pointOnPath(nodes, signalT);
+    sigPos.x += noise(t, cfg.noiseAmp);
+    sigPos.y += noise(t + 3, cfg.noiseAmp);
+    drawSignal(sigPos, cfg.color, cfg.glow, cfg.signalOpacity, 6);
+  }
+
+  // labels op nodes
+  ctx.font = '9px Courier New';
+  ctx.fillStyle = 'rgba(107,140,174,0.7)';
+  ctx.textAlign = 'center';
+  const labels = ['Axon', '', '', stage === 'verstoord' ? 'Laesie' : '', '', 'Synaps'];
+  nodes.forEach((n, i) => {
+    if (labels[i]) ctx.fillText(labels[i], n.x, n.y + 18);
+  });
+
+  animId = requestAnimationFrame(draw);
 }
 
-// Init
-window.addEventListener('resize', () => { resize(); initBoids(); });
-resize();
-initBoids();
-animate();
+// ── Stage wisselen ──────────────────────────────────────
+function setStage(newStage) {
+  if (newStage === stage) return;
+  prevStage = stage;
+  stage = newStage;
+  signalT = 0;
+  transitioning = true;
+  transitionProgress = 0;
+
+  // UI bijwerken
+  const cfg = STAGES[stage];
+  const dot  = document.getElementById('stageDot');
+  const name = document.getElementById('stageName');
+  const desc = document.getElementById('stageDesc');
+  dot.style.background  = cfg.dotColor;
+  dot.style.boxShadow   = '0 0 8px ' + cfg.dotColor;
+  name.textContent      = cfg.name;
+  name.style.color      = cfg.color;
+  desc.textContent      = cfg.desc;
+
+  document.querySelectorAll('.anim-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.anim-btn.' + newStage).classList.add('active');
+}
+
+// ── Klik op canvas wisselt stage ────────────────────────
+const stageOrder = ['gezond', 'verstoord', 'herstel'];
+canvas.addEventListener('click', () => {
+  const next = stageOrder[(stageOrder.indexOf(stage) + 1) % 3];
+  setStage(next);
+});
+
+// ── Init UI ─────────────────────────────────────────────
+setStage('gezond');
+draw();
+// ═══════════════════════════════════════════════════════
 </script>
 </body>
 </html>
